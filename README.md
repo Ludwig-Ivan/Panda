@@ -3,7 +3,7 @@
 **Agente inteligente para estimación de calorías mediante fotografías y recomendación de actividad física**
 
 > Proyecto académico — Ingeniería en Sistemas Computacionales
-> Instituto Tecnológico de Jiquilpan, Michoacán · Octubre 2026
+> Instituto Tecnológico de Jiquilpan, Michoacán · Septiembre 2026
 
 ## Descripción
 
