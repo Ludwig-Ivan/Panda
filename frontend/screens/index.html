@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bamboo · Inicio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand"><span class="logo">🐼</span><div><strong>BAMBOO</strong><small>Come mejor, avanza más</small></div></div>
+    <nav id="nav"></nav>
+    <p class="slogan">Pequeños cambios,<br>grandes resultados.</p>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <label class="search"><span>🔍</span><input type="search" placeholder="Buscar alimentos, recetas y más…" aria-label="Buscar"></label>
+      <button class="icon-btn" aria-label="Notificaciones">🔔<i class="dot"></i></button>
+      <div class="user"><span class="avatar">A</span><span class="uname">Alex</span></div>
+    </header>
+
+    <main class="content">
+      <section class="hello">
+        <div>
+          <h1>¡Hola, Alex!</h1>
+          <p>Vas muy bien. Hoy estás un paso más cerca de tus objetivos.</p>
+        </div>
+        <div class="date"><strong id="fecha"></strong><small>Semana 2 de 12</small><div class="bar thin"><i style="width:17%"></i></div></div>
+      </section>
+
+      <div class="grid">
+        <section class="card dark kcal">
+          <div class="ring">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="trk" cx="60" cy="60" r="52"/>
+              <circle id="ringFill" class="fill" cx="60" cy="60" r="52"/>
+            </svg>
+            <div class="ring-txt"><b id="kcalConsumed">0</b><span>kcal</span><small id="kcalOf"></small></div>
+          </div>
+          <div class="kcal-info"><h2>🔥 Calorías</h2><p>Restantes: <b id="kcalLeft"></b></p><div class="bar dark-bar"><i id="kcalBar"></i></div></div>
+        </section>
+
+        <section class="card macros"><h2>Macros</h2><div id="macros"></div></section>
+
+        <section class="card goal">
+          <div class="goal-head"><span>🎯</span><div><small>Tu objetivo</small><h2>Perder peso</h2></div></div>
+          <div class="goal-nums"><div><small>Meta de peso</small><b>100 kg</b></div><div><small>Peso actual</small><b id="pesoActual">108 kg</b></div></div>
+          <div class="goal-prog"><small>Progreso</small><div class="bar light"><i id="goalBar"></i></div><b id="goalTxt"></b></div>
+        </section>
+
+        <section class="card meals">
+          <div class="row-between"><h2>🍴 Comidas de hoy</h2><button class="link" id="verTodas">Ver todas →</button></div>
+          <ul id="mealList"></ul>
+          <div class="actions">
+            <button class="btn primary" id="btnRegistrar"><b>＋ Registrar comida</b><small>Añade lo que comiste o escanea un código de barras</small></button>
+            <button class="btn ghost" id="btnEscanear"><b>📷 Escanear alimento</b><small>Usa la cámara para un registro rápido</small></button>
+          </div>
+        </section>
+
+        <section class="card chart dark">
+          <div class="row-between"><h2>Tu progreso semanal</h2><span class="pill" id="weekDelta"></span></div>
+          <svg id="chart" viewBox="0 0 320 170" role="img" aria-label="Gráfica de peso semanal"></svg>
+        </section>
+
+        <section class="trio">
+          <div class="mini"><span class="mi">💧</span><div><b>Hidratación</b><small id="hidTxt"></small><div class="bar thin"><i id="hidBar"></i></div></div><button class="round" id="hidAdd" aria-label="Añadir 250 ml">＋</button></div>
+          <div class="mini"><span class="mi">🏃</span><div><b>Actividad</b><small>Caminata 3.27 km<br>45 min</small></div><span class="round ok">✓</span></div>
+          <div class="mini"><span class="mi">🏋️</span><div><b>Entrenamiento</b><small>Rutina de fuerza<br>Hoy · 2:00 h</small></div><span class="chev">›</span></div>
+        </section>
+
+        <section class="card tips">
+          <div class="tip-head"><span>💡</span><h2>Consejos de hoy</h2></div>
+          <div class="tip-body"><button class="arrow" id="tipPrev" aria-label="Anterior">‹</button><p id="tipText"></p><button class="arrow" id="tipNext" aria-label="Siguiente">›</button></div>
+          <div class="dots" id="tipDots"></div>
+        </section>
+
+        <section class="card dark motto"><p>Disciplina hoy,<br>resultados mañana.</p><span class="panda">🐼</span></section>
+      </div>
+    </main>
+  </div>
+
+  <nav class="tabbar" id="tabbar" aria-label="Navegación"></nav>
+</div>
+
+<dialog id="mealDialog">
+  <form method="dialog" id="mealForm">
+    <h2>Registrar comida</h2>
+    <label>Momento<select name="tipo"><option>Desayuno</option><option>Comida</option><option>Cena</option><option>Snack</option></select></label>
+    <label>Nombre<input name="nombre" required placeholder="Ej. Tacos de pollo"></label>
+    <div class="f3">
+      <label>kcal<input name="kcal" type="number" min="0" required></label>
+      <label>P (g)<input name="p" type="number" min="0" value="0"></label>
+      <label>C (g)<input name="c" type="number" min="0" value="0"></label>
+      <label>G (g)<input name="g" type="number" min="0" value="0"></label>
+    </div>
+    <div class="dlg-actions"><button type="button" class="btn ghost" id="cancelar">Cancelar</button><button class="btn primary">Guardar</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="../js/app.js"></script>
+
+<!-- LIBRERÍAS / FRAMEWORKS RECOMENDADOS (opcionales, no incluidos en este preview):
+  - Lucide Icons (https://lucide.dev): reemplazar los emojis por iconos SVG consistentes.
+  - Chart.js (https://www.chartjs.org): gráficas interactivas cuando haya datos reales.
+  - Alpine.js (https://alpinejs.dev): reactividad ligera sin build.
+  - Vue 3 o React + Vite: si la app crece y necesitas componentes y rutas.
+  - Tailwind CSS: alternativa a styles.css para acelerar el estilado.
+  - Day.js: manejo de fechas ligero al conectar con la base de datos.
+-->
+</body>
+</html>
