@@ -1,233 +1,218 @@
-# Panda
-
-**Agente inteligente para estimación de calorías mediante fotografías y recomendación de actividad física**
-
-> Proyecto académico — Ingeniería en Sistemas Computacionales
-> Instituto Tecnológico de Jiquilpan, Michoacán · Septiembre 2026
-
-## Descripción
-
-**Panda** es un sistema que permite al usuario tomar o cargar una fotografía de su comida. Un servicio de inteligencia artificial con visión por computadora identifica los alimentos presentes, estima sus porciones y calcula un valor calórico aproximado por alimento y para el total de la comida. Después, el agente propone distintas **alternativas de actividad física** con una duración estimada para gastar las calorías identificadas.
-
-## Problema que resuelve
-
-El registro manual de alimentos es tardado: hay que buscar cada producto, estimar cantidades y capturar datos. Además, existe una separación entre las apps que registran alimentos y la explicación sencilla de lo que una comida representa energéticamente. Panda reduce los pasos necesarios para obtener una referencia inicial usando una fotografía y un agente conversacional.
-
-## Funcionalidades Principales
-
-- Registro, inicio de sesión y edición de perfil (edad, sexo, peso, estatura).
-- Captura o carga de imágenes desde la cámara o la galería.
-- Detección de uno o varios alimentos en la fotografía.
-- Estimación de porciones y calorías **por alimento** y **total** de la comida (mostrado como rango).
-- Corrección manual de alimentos y porciones detectados por la IA.
-- Generación de una lista de ejercicios con su duración según las calorías y el perfil del usuario.
-- Historial de comidas, calorías y ejercicios recomendados.
-- Estadísticas de consumo y calorías quemadas por periodo.
-- Panel de administración: gestión de usuarios y de catálogos de alimentos y ejercicios.
-- Mensajes claros de error y avisos de que los resultados son aproximados.
-
-### Fuera del alcance
-
-- Diagnósticos médicos o nutricionales.
-- Sustituir la valoración de un nutriólogo, médico o entrenador.
-- Garantizar una medición exacta de porciones solo a partir de una fotografía.
-- Prescribir rutinas clínicas o tratamientos.
-- Integración con dispositivos inteligentes o *wearables*.
-
-## Flujo principal de uso
-
-1. El usuario ingresa a Panda e inicia sesión (o crea una cuenta).
-2. Selecciona la opción para analizar una comida.
-3. Toma una fotografía o carga una imagen.
-4. El sistema envía la imagen al servicio de análisis con IA.
-5. La IA identifica los alimentos visibles.
-6. El sistema obtiene la estimación calórica de cada alimento y calcula el total aproximado.
-7. El agente genera varias alternativas de actividad física.
-8. El usuario consulta el detalle, puede corregirlo y guardar el análisis en su historial.
-
-**Ejemplo:** el usuario carga una foto con pollo, arroz y ensalada → Panda muestra las calorías de cada elemento, un total aproximado y varias actividades con duración estimada.
-
+<p align="center">
+  <!-- IMAGEN 1: banner o logo. Reemplazar por docs/img/banner.png (sugerido: 1280×320 px) -->
+  <img src="docs/img/banner.png" alt="Panda: come mejor, avanza más" width="100%">
+</p>
+<h1 align="center">Panda</h1>
+ 
+<p align="center">
+  <strong>Estima las calorías de tu comida con una foto y descubre cómo equilibrarlas.</strong><br>
+  Agente inteligente para estimación de calorías y recomendación de actividad física.
+</p>
+<p align="center">
+  <img alt="Estado" src="https://img.shields.io/badge/estado-en%20desarrollo-f97316">
+  <img alt="Django" src="https://img.shields.io/badge/Django-5.2%20LTS-092e20?logo=django&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React-Vite-149eca?logo=react&logoColor=white">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql&logoColor=white">
+  <img alt="Proyecto académico" src="https://img.shields.io/badge/proyecto-académico-16a34a">
+</p>
+<p align="center">
+  <a href="#qué-es-panda">Qué es</a> ·
+  <a href="#cómo-funciona">Cómo funciona</a> ·
+  <a href="#arquitectura">Arquitectura</a> ·
+  <a href="#modelo-de-datos">Datos</a> ·
+  <a href="#primeros-pasos">Primeros pasos</a> ·
+  <a href="#roadmap">Roadmap</a> ·
+  <a href="#equipo">Equipo</a>
+</p>
+---
+ 
+## Qué es Panda
+ 
+Registrar lo que comes es tardado: hay que buscar cada alimento, estimar cantidades y capturar datos a mano. Y aun después de hacerlo, un número de calorías no dice mucho a quien no sabe qué significa en la práctica.
+ 
+**Panda** reduce ese esfuerzo a una fotografía. Un servicio de visión por computadora identifica los alimentos del plato, estima sus porciones y calcula las calorías por alimento y en total, siempre como un **rango** y no como una cifra exacta. Después, el agente traduce ese número en algo comprensible: **alternativas de actividad física** con una duración estimada para equilibrar esa comida.
+ 
+Panda también incluye un **asistente de IA** conversacional para resolver dudas sobre tu día y tus metas.
+ 
+> Panda ofrece estimaciones orientativas. No emite diagnósticos ni sustituye la valoración de un nutriólogo, médico o entrenador.
+ 
+## Capturas
+ 
+<!-- IMAGEN 2: capturas de pantalla. Guardarlas en docs/img/screens/ con estos nombres. -->
+<p align="center">
+  <img src="docs/img/screens/landing.png" alt="Página de presentación" width="49%">
+  <img src="docs/img/screens/dashboard.png" alt="Panel de inicio" width="49%">
+</p>
+<p align="center">
+  <img src="docs/img/screens/analisis.png" alt="Análisis de una comida por fotografía" width="49%">
+  <img src="docs/img/screens/recomendacion.png" alt="Recomendación de actividad física" width="49%">
+</p>
+## Funcionalidades
+ 
+| Área | Qué incluye |
+|---|---|
+| **Análisis por foto** | Carga desde cámara o galería, detección de uno o varios alimentos, porciones y calorías por alimento y total, con rango y nivel de confianza |
+| **Corrección** | Agregar, editar o eliminar alimentos y porciones; cada cambio queda registrado y la estimación original nunca se modifica |
+| **Actividad física** | Lista de ejercicios con duración y sesiones según las calorías de la comida, tu peso y tus actividades preferidas |
+| **Seguimiento** | Historial de comidas, calorías y recomendaciones, con estadísticas por periodo |
+| **Asistente de IA** | Chat para consultar tu progreso y recibir sugerencias; su icono es una esfera verde |
+| **Cuenta y privacidad** | Registro, perfil físico, consentimientos versionados, control sobre guardar tus fotos y eliminación completa de tu cuenta |
+| **Administración** | Gestión de usuarios y catálogos de alimentos y ejercicios desde el panel de administración |
+ 
+**Fuera del alcance:** diagnósticos médicos o nutricionales, prescripción de rutinas clínicas, medición exacta de porciones solo con una foto e integración con *wearables*.
+ 
+## Cómo funciona
+ 
+```mermaid
+flowchart LR
+    A["Foto de la comida"] --> B["Detección<br/>de alimentos"]
+    B --> C["Porciones<br/>y calorías"]
+    C --> D["Revisión y<br/>corrección"]
+    D --> E["Recomendación<br/>de actividad"]
+    E --> F[("Historial")]
+```
+ 
+1. **Detección.** La imagen se analiza para identificar los alimentos visibles.
+2. **Estimación.** La porción se calcula con base en la porción de referencia del catálogo y el tamaño relativo del alimento en la imagen. Las calorías se obtienen con la densidad energética del catálogo: `kcal = kcal por 100 g × porción (g) / 100`.
+3. **Revisión.** El usuario confirma o corrige lo detectado. Si no se detecta nada o la confianza es baja, Panda lo avisa y marca el resultado como aproximado.
+4. **Recomendación.** Se calcula la duración de cada actividad a partir de su valor MET, el peso del usuario y las calorías a equilibrar (`kcal = MET × peso (kg) × horas`). La fórmula se versiona para poder reproducir cada recomendación.
+5. **Historial.** Todo se guarda para consultarlo después.
 ## Arquitectura
-
-Panda se divide en **cinco microservicios independientes** más un **API Gateway** que centraliza las peticiones del cliente y valida el token JWT. Cada microservicio es dueño de su información y **no accede directamente a la base de datos de otro**.
-
+ 
 ```mermaid
 flowchart TD
-    C["Aplicación cliente<br/>(web / móvil)"] -->|HTTPS / REST| G["API Gateway<br/>(enrutamiento, validación JWT)"]
-    G --> MS1["MS-1 Usuarios y Autenticación"]
-    G --> MS2["MS-2 Análisis de Imágenes e IA"]
-    G --> MS4["MS-4 Recomendaciones de Actividad Física"]
-    G --> MS5["MS-5 Historial"]
+    C["Cliente web<br/>React + Vite"] -->|"HTTPS / REST + JWT"| API["API REST<br/>Django + DRF"]
+    API --> PG[("PostgreSQL 16")]
+    API --> R2[("Cloudflare R2<br/>fotos")]
+    API --> VIS["Servicio de visión<br/>por computadora"]
+    API --> ASI["Asistente de IA"]
+```
  
-    MS2 -->|imagen| IA["Modelo de IA propio<br/>(inferencia dentro de MS-2)"]
-    MS2 -->|consulta kcal| MS3["MS-3 Información Nutricional"]
-    MS2 -->|registra análisis| MS5
-    MS2 -->|guarda resultado| MONGO[("MongoDB<br/>análisis detallados")]
-    MS4 -->|"peso del perfil (opcional)"| MS1
+El backend está organizado en aplicaciones de Django con responsabilidades separadas: identidad, catálogos, comidas y recomendaciones. Las fotografías **no se guardan en la base de datos**: viven en Cloudflare R2 y la base solo conserva su clave. El servicio de visión se mantiene detrás de una interfaz propia, de modo que el modelo puede reemplazarse sin tocar el resto de la aplicación; cada análisis registra qué proveedor y versión lo generaron.
  
-    MS1 --> PG1[("PostgreSQL<br/>schema usuarios")]
-    MS3 --> PG3[("PostgreSQL<br/>schema nutrición")]
-    MS4 --> PG4[("PostgreSQL<br/>schema actividades")]
-    MS5 --> PG5[("PostgreSQL<br/>schema historial")]
-```
-
-| Microservicio | Responsabilidad | Base de datos | Consume |
-|---|---|---|---|
-| **API Gateway** | Punto único de entrada, enrutamiento y validación del JWT | — | MS-1 a MS-5 |
-| **MS-1 Usuarios y Autenticación** | Registro, inicio de sesión, roles (usuario/administrador) y perfil opcional | PostgreSQL | — |
-| **MS-2 Análisis de Imágenes e IA** | Recibe la foto, la procesa con el modelo de IA propio, valida el resultado y calcula las calorías | MongoDB | Modelo de IA, MS-3, MS-5 |
-| **MS-3 Información Nutricional** | Catálogo de alimentos con valores nutricionales por 100 g y por porción | PostgreSQL | — |
-| **MS-4 Recomendaciones** | Calcula los minutos de cada actividad para gastar las calorías estimadas | PostgreSQL | MS-1 (peso, opcional) |
-| **MS-5 Historial** | Guarda el resumen de cada análisis y permite consultarlos | PostgreSQL | — |
-
-### Bases de datos
-
-**PostgreSQL** (un *schema* por microservicio) — información estructurada con integridad referencial y transacciones:
-
-- `ROL`, `USUARIO` (correo único, contraseña con hash), `PERFIL` (relación 1:0..1 con usuario).
-- `ALIMENTO` (kcal, proteínas, carbohidratos y grasas por 100 g, porción de referencia) y `ACTIVIDAD_FISICA` (nombre, MET, intensidad): catálogos propios de cada servicio, sin llaves foráneas hacia otras tablas.
-- `ANALISIS` (resumen: fecha, total de kcal, estado e `id_documento_mongo`) para consultar y ordenar eficientemente el historial.
-
-**MongoDB** — colección `analisis_detalle`, enlazada a PostgreSQL mediante `id_analisis` e `id_usuario`. Se eligió porque la salida del modelo de IA es variable (cantidad de alimentos distinta por foto, formato que puede cambiar al reentrenar el modelo) y permite conservar la salida cruda para auditar errores.
-
-```text
-analisis_detalle
-├── _id, id_analisis, id_usuario, creado_en, total_kcal, advertencias[]
-├── imagen              { ruta, tipo_mime, tamano_kb }
-├── modelo_ia           { nombre_modelo, version, salida_cruda }
-├── alimentos_detectados[]  { nombre, id_alimento, confianza, porcion_estimada_g, kcal, macronutrientes }
-└── recomendaciones[]       { id_actividad, nombre, minutos_estimados }
-```
-
-## Servicio de inteligencia artificial
-
-- **Modelo:** modelo propio de visión por computadora (detección de objetos, tipo **YOLO**) entrenado con un conjunto de datos de alimentos. Se despliega dentro de MS-2 y se expone como API interna de inferencia (entrada: imagen; salida: JSON). No depende de servicios externos ni de costo por consulta.
-- **Porciones:** se estiman a partir de la porción de referencia del catálogo (MS-3), ajustada por el tamaño relativo del área detectada en la imagen.
-- **Calorías:** se calculan en MS-2 con los valores nutricionales del catálogo.
-- **Recomendaciones de ejercicio:** MS-4 aplica la fórmula
-
-  ```text
-  calorías = MET × peso (kg) × horas
-  ```
-
-  usando un peso promedio cuando el usuario no registra el suyo.
-- **Validación:** la salida del modelo se valida contra un esquema antes de guardarse. Si no se detectan alimentos o la confianza es baja, se informa al usuario y el resultado se marca como aproximado.
-
-## Requisitos
-
-### Funcionales
-
-| ID | Requisito |
+| Capa | Tecnología |
 |---|---|
-| RF-01 | Crear cuenta, iniciar sesión y editar el perfil |
-| RF-02 | Cargar una imagen desde la cámara o la galería |
-| RF-03 | Identificar los alimentos de la imagen y estimar su porción |
-| RF-04 | Mostrar calorías totales como rango y desglose por alimento |
-| RF-05 | Corregir alimentos y porciones detectados |
-| RF-06 | Generar lista de ejercicios con duración según calorías y perfil |
-| RF-07 | Guardar historial de comidas, calorías y ejercicios recomendados |
-| RF-08 | Mostrar estadísticas de consumo y calorías quemadas por periodo |
-| RF-09 | El administrador gestiona usuarios y catálogos de alimentos y ejercicios |
-
-### No funcionales
-
-| ID | Categoría | Requisito |
-|---|---|---|
-| RNF-01 | Rendimiento | El análisis de una foto devuelve resultado en pocos segundos en condiciones normales de red |
-| RNF-02 | Usabilidad | Flujo principal en pocos pasos y utilizable desde un teléfono móvil |
-| RNF-03 | Privacidad | Fotos y datos de salud tratados como información sensible: acceso solo del propietario y almacenamiento protegido |
-| RNF-04 | Seguridad | Autenticación de usuarios, contraseñas sin texto plano y comunicación cifrada |
-| RNF-05 | Escalabilidad | El servicio de IA (el más costoso) puede escalar de forma independiente |
-| RNF-06 | Mantenibilidad | Código organizado por servicios, documentado y con control de versiones |
-
-## Tipos de usuario
-
-| Usuario | Necesidades |
-|---|---|
-| **Usuario general** | Cargar fotos, ver resultados sencillos, calorías aproximadas, alternativas de ejercicio e historial |
-| **Deportista** | Ajustar rutinas según nivel de entrenamiento y equipo disponible |
-| **Usuario con meta de peso** | Definir una meta, ver progreso en gráficas y recibir avisos al superar el consumo planeado |
-| **Administrador** | Gestionar usuarios y catálogos, revisar registros y monitorear el servicio de IA |
-
-## Tecnologías previstas
-
-| Área | Tecnología |
-|---|---|
-| Arquitectura | Microservicios + API Gateway (HTTPS / REST, JWT) |
-| Bases de datos | PostgreSQL, MongoDB |
-| Inteligencia artificial | Modelo propio de detección de objetos (tipo YOLO) |
-| Gestión del proyecto | Scrum, JIRA |
-| Control de versiones | Git |
-
-> Los lenguajes y *frameworks* concretos se definirán durante el diseño detallado.
-
-## Estructura propuesta del repositorio
-
-```text
-panda/
-├── api-gateway/
-├── ms-usuarios/          # MS-1
-├── ms-analisis-ia/       # MS-2 (incluye el modelo de IA)
-├── ms-nutricion/         # MS-3
-├── ms-recomendaciones/   # MS-4
-├── ms-historial/         # MS-5
-├── client/               # Aplicación web / móvil
-├── docs/                 # Documentación y diagramas
-└── README.md
+| Frontend | React, Vite, React Router |
+| Backend | Python, Django 5.2 LTS, Django REST Framework, simplejwt |
+| Base de datos | PostgreSQL 16 (`pg_trgm`, `unaccent`) |
+| Almacenamiento de fotos | Cloudflare R2 |
+| Autenticación | JWT con refresh token en cookie HttpOnly, contraseñas con Argon2id |
+| Gestión del proyecto | Scrum, JIRA, Git |
+ 
+## Modelo de datos
+ 
+```mermaid
+erDiagram
+    USUARIOS ||--|| PERFILES : tiene
+    USUARIOS ||--o{ CONSENTIMIENTOS : otorga
+    USUARIOS ||--o{ PREFERENCIAS_ACTIVIDAD : elige
+    ACTIVIDADES ||--o{ PREFERENCIAS_ACTIVIDAD : preferida_en
+    USUARIOS ||--o{ COMIDAS : registra
+    COMIDAS ||--o{ COMIDA_ITEMS : contiene
+    ALIMENTOS |o--o{ COMIDA_ITEMS : aparece_en
+    COMIDAS ||--o{ CORRECCIONES : historial
+    COMIDAS ||--o| RECOMENDACIONES : genera
+    RECOMENDACIONES ||--o{ RECOMENDACION_ITEMS : contiene
+    ACTIVIDADES ||--o{ RECOMENDACION_ITEMS : se_usa_en
 ```
-
-## Instalación y ejecución
-
-> *Pendiente.* Esta sección se completará conforme se implementen los servicios.
-
+ 
+Decisiones de diseño destacadas:
+ 
+- **Auditoría inmutable.** La estimación original de la IA se guarda una sola vez y cada cambio del usuario genera una fila de corrección.
+- **Historial estable.** Cada alimento de una comida conserva una copia de su densidad energética, así que actualizar el catálogo no altera lo registrado.
+- **Integridad en la base.** Restricciones `CHECK`, claves foráneas con `ON DELETE` definido y catálogos que se desactivan en lugar de borrarse.
+- **Identificadores no enumerables.** Los datos que expone la API usan UUID.
+El esquema completo, con el SQL de referencia, los índices y la estrategia de migraciones, está en [`docs/DISENO_BASE_DE_DATOS.pdf`](docs/DISENO_BASE_DE_DATOS.pdf).
+ 
+## Privacidad y seguridad
+ 
+Panda maneja datos de salud (peso, hábitos alimenticios) y fotografías, por lo que los trata como información sensible.
+ 
+- Solo pueden registrar comidas las personas mayores de 18 años que hayan aceptado los tres avisos (privacidad, avisos de salud y procesamiento por terceros) en su versión vigente.
+- Cada usuario accede únicamente a sus propios datos.
+- Comunicaciones cifradas con TLS y objetos cifrados en reposo en Cloudflare R2.
+- Roles de base de datos separados: uno para migraciones, otro para la API y otro de solo lectura sin acceso a contraseñas ni tokens.
+- Los borradores sin confirmar se eliminan a las 24 horas.
+- Eliminar una comida o la cuenta borra los datos y las fotos de inmediato.
+- Respaldos diarios con 7 días de retención.
+## Primeros pasos
+ 
+### Requisitos
+Node.js 18 o superior, Python 3.12 o superior y PostgreSQL 16.
+ 
+### Clonar el repositorio
 ```bash
-# Clonar el repositorio
 git clone <url-del-repositorio>
 cd panda
-
-# TODO: variables de entorno, bases de datos y arranque de los servicios
 ```
-
-## Equipo y metodología
-
-El desarrollo sigue **Scrum**, con entregas incrementales. Aunque cada integrante tiene un rol principal, todos colaboran en análisis, diseño, desarrollo, pruebas, documentación e integración.
-
+ 
+### Frontend
+```bash
+cd frontend
+npm install
+cp .env.example .env        # VITE_USE_MOCK=true funciona sin backend
+npm run dev
+```
+ 
+### Backend
+> *En construcción.* Los comandos siguen el diseño de migraciones del proyecto y se ajustarán cuando exista el código.
+ 
+```bash
+cd backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env        # DATABASE_URL, DATABASE_URL_MIGRACIONES, claves de R2
+python manage.py migrate
+python manage.py createcachetable
+python manage.py cargar_catalogos
+python manage.py runserver
+```
+ 
+## Estructura del repositorio
+ 
+```text
+panda/
+├── backend/      # API REST con Django (identidad, catálogos, comidas, recomendaciones)
+├── frontend/     # Aplicación web con React + Vite
+├── docs/         # Documentación, diagramas e imágenes
+│   └── img/      # Banner y capturas de pantalla
+└── README.md
+```
+ 
+## Roadmap
+ 
+- [x] Documento de visión y requisitos
+- [x] Diseño de base de datos v0.2 (PostgreSQL + Django)
+- [x] Prototipo de la página de presentación y de las pantallas de acceso
+- [ ] Onboarding: consentimientos, perfil físico y preferencias de actividad
+- [ ] Análisis de comidas por fotografía, con revisión y corrección
+- [ ] Recomendaciones de actividad física
+- [ ] Historial y estadísticas por periodo
+- [ ] Asistente de IA conversacional
+- [ ] Meta de peso, hidratación y entrenamientos (requiere ampliar el esquema)
+- [ ] Panel de administración de catálogos
+## Equipo
+ 
+Proyecto académico de **Ingeniería en Sistemas Computacionales** del **Instituto Tecnológico de Jiquilpan**, Michoacán · Septiembre 2026.
+ 
 | Integrante | Rol principal | Participación técnica |
 |---|---|---|
-| Ludwig Iván Ortiz Sierra | Scrum Master (rotativo) | Programación, integración de servicios, pruebas y documentación |
+| Ludwig Iván Ortiz Sierra | Scrum Master (rotativo) | Programación, integración, pruebas y documentación |
 | Estefania López Rivas | Product Owner | Análisis de requerimientos, backend, pruebas y validación funcional |
 | Sergio Octavio Cervantes Múgica | Development Team | Interfaz de usuario, integración con el agente de IA, pruebas y documentación |
-
+ 
 **Docente:** Leoardo Martinez Gonzales
-
-**Ceremonias:** Planificación del Sprint · Daily Scrum · Sprint Review · Sprint Retrospective.
-**Rotación:** el rol de Scrum Master rotará entre los tres integrantes en distintos Sprints (inicia Iván).
-
-## Acuerdos de trabajo y flujo con Git
-
-- Registrar en **JIRA** las tareas importantes antes de comenzar su desarrollo.
-- Trabajar mediante **ramas de Git**; no modificar directamente la versión estable.
-- Revisar los cambios antes de integrarlos a la rama principal.
-- Comunicar bloqueos al equipo para evitar retrasos.
-- Probar las funcionalidades antes de marcarlas como terminadas.
-- Mantener actualizada la documentación del proyecto.
-
-## Criterios de éxito
-
-- El usuario puede cargar correctamente una fotografía.
-- El sistema devuelve los alimentos detectados o informa cuando no puede identificarlos.
-- Se presenta una estimación calórica comprensible.
-- Se muestran varias alternativas de actividad física.
-- El análisis puede almacenarse y recuperarse desde el historial.
-- Los errores de los servicios se comunican de forma clara.
-- El equipo demuestra un incremento funcional al finalizar los Sprints planificados.
-
-## Privacidad y seguridad
-
-Las imágenes y los datos del usuario se manejan únicamente para las funciones previstas por el sistema. Las contraseñas se almacenan con hash, el acceso a la información privada está protegido y las comunicaciones van cifradas.
-
+ 
+### Forma de trabajo
+ 
+El desarrollo sigue **Scrum**, con entregas incrementales y rotación del rol de Scrum Master entre los tres integrantes.
+ 
+- Las tareas importantes se registran en JIRA antes de empezar.
+- Se trabaja en ramas de Git; la versión estable no se modifica directamente.
+- Los cambios se revisan antes de integrarse a la rama principal.
+- Cada funcionalidad se prueba antes de marcarse como terminada.
+- Los bloqueos se comunican al equipo y la documentación se mantiene actualizada.
 ## Documentación relacionada
-
+ 
 - [Documento de Visión del Proyecto](docs/VISION_DE_PROYECTO.pdf)
-
----
+- [Diseño de Base de Datos](docs/DISENO_BASE_DE_DATOS.pdf)
