@@ -135,38 +135,6 @@ Panda maneja datos de salud (peso, hábitos alimenticios) y fotografías, por lo
 - Los borradores sin confirmar se eliminan a las 24 horas.
 - Eliminar una comida o la cuenta borra los datos y las fotos de inmediato.
 - Respaldos diarios con 7 días de retención.
-## Primeros pasos
- 
-### Requisitos
-Node.js 18 o superior, Python 3.12 o superior y PostgreSQL 16.
- 
-### Clonar el repositorio
-```bash
-git clone <url-del-repositorio>
-cd panda
-```
- 
-### Frontend
-```bash
-cd frontend
-npm install
-cp .env.example .env        # VITE_USE_MOCK=true funciona sin backend
-npm run dev
-```
- 
-### Backend
-> *En construcción.* Los comandos siguen el diseño de migraciones del proyecto y se ajustarán cuando exista el código.
- 
-```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env        # DATABASE_URL, DATABASE_URL_MIGRACIONES, claves de R2
-python manage.py migrate
-python manage.py createcachetable
-python manage.py cargar_catalogos
-python manage.py runserver
-```
  
 ## Estructura del repositorio
  
