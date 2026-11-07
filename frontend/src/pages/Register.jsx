@@ -25,9 +25,8 @@ export default function Register() {
     if (Object.keys(er).length) return
     setBusy(true)
     try {
-      // El correo se guarda en minúsculas (ck_usuarios_email_minusculas).
       await api.register({ email: v.email.trim().toLowerCase(), password: v.password, mayor_edad_declarado: true })
-      nav('/inicio')
+      nav('/onboarding')
     } catch (err) {
       setServer(err.status === 400 ? 'No pudimos crear la cuenta con esos datos. Revisa el correo o intenta iniciar sesión.' : 'Algo salió mal. Inténtalo de nuevo.')
     } finally { setBusy(false) }

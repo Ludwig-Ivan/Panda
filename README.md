@@ -1,6 +1,5 @@
 <p align="center">
-  <!-- IMAGEN 1: banner o logo. Reemplazar por docs/img/banner.png (sugerido: 1280×320 px) -->
-  <img src="docs/img/banner.png" alt="Panda: come mejor, avanza más" width="100%">
+  <img src="docs/img/logo.png" alt="Panda: come mejor, avanza más" width="100%">
 </p>
 <h1 align="center">Panda</h1>
  

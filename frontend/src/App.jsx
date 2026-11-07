@@ -5,12 +5,13 @@ import Register from './pages/Register.jsx'
 import Login from './pages/Login.jsx'
 import Forgot from './pages/Forgot.jsx'
 import Legal from './pages/Legal.jsx'
+import OnBoarding from './pages/Onboarding.jsx'
 import AuthShell from './components/AuthShell.jsx'
 
 // Marcador temporal: aquí empezará la etapa de onboarding y la app.
 const Pending = () => (
   <AuthShell title="Sesión iniciada" sub="La siguiente etapa (onboarding y panel) aún está en construcción.">
-    <Link className="btn" to="/">Volver al inicio</Link>
+    <Link className="btn" to="/onboarding">Volver al inicio</Link>
   </AuthShell>
 )
 
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="recuperar" element={<Forgot />} />
         <Route path="avisos/:slug" element={<Legal />} />
         <Route path="inicio" element={<Pending />} />
+        <Route path="onboarding" element={<OnBoarding/>} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
