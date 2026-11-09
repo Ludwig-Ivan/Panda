@@ -1,0 +1,18 @@
+.page .meals li{display:block;padding:0}.page .meals .meal-row{display:grid;grid-template-columns:56px 1fr auto;gap:10px;align-items:center;padding:10px 0;color:inherit;text-decoration:none}
+.search{display:grid;gap:12px}.search input[type=search]{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);width:100%}
+.res-list{list-style:none;padding:0;display:grid;gap:8px}
+.res-item{width:100%;display:flex;justify-content:space-between;gap:12px;align-items:center;text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surf);color:var(--tx);cursor:pointer}
+.res-item:hover{border-color:var(--or)}.res-item small{display:block;color:var(--mut)}
+.form-card{display:grid;gap:14px}.form-card label{display:grid;gap:5px;font-size:.82rem;color:var(--mut)}
+.form-card input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);width:100%}
+.stepper{display:flex;gap:8px;align-items:center}.stepper input{text-align:center}.stepper .btn{padding:10px 14px}
+.preview{display:flex;justify-content:space-between;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--or) 10%,var(--bg))}
+.danger{color:var(--err)}
+details.manual{border-top:1px solid var(--line);padding-top:12px;margin-top:8px}details.manual summary{cursor:pointer;color:var(--or);font-size:.9rem}
+.recap{list-style:none;padding:0;display:grid}.recap li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.recap small{color:var(--mut)}
+.pill{display:inline-block;font-size:.72rem;padding:1px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}.pill.fav{border-color:var(--or);color:var(--or)}
+.rec{display:grid;gap:12px}.rec-card{display:flex;justify-content:space-between;gap:14px;align-items:center}.rec-card b{display:block}.rec-card small{color:var(--mut)}
+.rec-min{font-size:1.5rem;font-weight:600;text-align:right;line-height:1}.rec-min small{display:block;font-size:.75rem;font-weight:400}
+.confirm-del{display:grid;gap:10px;padding:14px;border:1px solid var(--err);border-radius:14px}
+.day{display:grid;gap:8px}.day h2{display:flex;justify-content:space-between;font-size:.95rem}.day h2 span{color:var(--mut);font-weight:400}
+.sum{display:grid;gap:4px;color:var(--mut);font-size:.85rem}

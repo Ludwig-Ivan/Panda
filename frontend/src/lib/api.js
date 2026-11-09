@@ -42,3 +42,5 @@ export const api = {
     await send('PATCH', '/usuarios/me/', { guardar_fotos: b.guardar_fotos })      // usuarios.guardar_fotos
   },
 }
+
+export { send, BASE, MOCK, wait }

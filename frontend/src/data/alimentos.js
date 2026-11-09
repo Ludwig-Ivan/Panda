@@ -1,0 +1,23 @@
+// Catálogo de ejemplo (valores aproximados) para probar la búsqueda sin backend.
+export const ALIMENTOS_MOCK = [
+  { id: 101, nombre: 'Pechuga de pollo cocida', kcal_100g: 165, porcion_tipica_g: 120, alias: ['pollo'] },
+  { id: 102, nombre: 'Arroz blanco cocido', kcal_100g: 130, porcion_tipica_g: 150, alias: ['arroz'] },
+  { id: 103, nombre: 'Frijoles cocidos', kcal_100g: 127, porcion_tipica_g: 120, alias: ['frijol'] },
+  { id: 104, nombre: 'Tortilla de maíz', kcal_100g: 218, porcion_tipica_g: 30, alias: ['tortilla'] },
+  { id: 105, nombre: 'Huevo cocido', kcal_100g: 143, porcion_tipica_g: 50, alias: ['huevo'] },
+  { id: 106, nombre: 'Aguacate', kcal_100g: 160, porcion_tipica_g: 70, alias: ['palta'] },
+  { id: 107, nombre: 'Plátano', kcal_100g: 89, porcion_tipica_g: 120, alias: ['banana', 'platano'] },
+  { id: 108, nombre: 'Manzana', kcal_100g: 52, porcion_tipica_g: 180, alias: [] },
+  { id: 109, nombre: 'Avena en hojuelas', kcal_100g: 389, porcion_tipica_g: 40, alias: ['avena'] },
+  { id: 110, nombre: 'Pan integral', kcal_100g: 247, porcion_tipica_g: 30, alias: ['pan'] },
+  { id: 111, nombre: 'Atún en agua', kcal_100g: 116, porcion_tipica_g: 80, alias: ['atun'] },
+  { id: 112, nombre: 'Pasta cocida', kcal_100g: 158, porcion_tipica_g: 160, alias: ['espagueti', 'spaghetti'] },
+  { id: 113, nombre: 'Papa cocida', kcal_100g: 87, porcion_tipica_g: 150, alias: ['patata'] },
+  { id: 114, nombre: 'Brócoli cocido', kcal_100g: 35, porcion_tipica_g: 90, alias: ['brocoli'] },
+  { id: 115, nombre: 'Ensalada mixta', kcal_100g: 20, porcion_tipica_g: 90, alias: [] },
+  { id: 116, nombre: 'Yogur griego natural', kcal_100g: 59, porcion_tipica_g: 150, alias: ['yogurt'] },
+  { id: 117, nombre: 'Nueces', kcal_100g: 654, porcion_tipica_g: 30, alias: [] },
+  { id: 118, nombre: 'Carne de res molida cocida', kcal_100g: 250, porcion_tipica_g: 100, alias: ['carne molida'] },
+  { id: 119, nombre: 'Lentejas cocidas', kcal_100g: 116, porcion_tipica_g: 150, alias: ['lenteja'] },
+  { id: 120, nombre: 'Queso panela', kcal_100g: 260, porcion_tipica_g: 40, alias: ['queso'] },
+]
