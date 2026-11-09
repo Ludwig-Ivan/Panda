@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import HelpChat from './HelpChat.jsx'
 import '../app.css'
+import logo from "../assets/logo.png"
 
 // ready=false: pantalla aún no construida (se muestra deshabilitada).
 const NAV = [
@@ -20,7 +21,7 @@ export default function AppLayout() {
   return (
     <div className="app-shell">
       <aside className="side">
-        <Link to="/inicio" className="brand"><span className="logo">🐼</span>PANDA</Link>
+        <Link to="/inicio" className="brand"><img className="logo" src = {logo}/>PANDA</Link>
         <nav aria-label="Principal">{NAV.map((n) => <Item key={n.to} n={n} cls="nav-i" />)}</nav>
       </aside>
       <div className="app-main">

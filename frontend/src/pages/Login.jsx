@@ -20,7 +20,7 @@ export default function Login() {
       await api.login({ email: v.email.trim().toLowerCase(), password: v.password })
       nav('/inicio')
     } catch {
-      setErr('Correo o contraseña incorrectos.') // mensaje genérico a propósito
+      setErr('Correo o contraseña incorrectos.')
     } finally { setBusy(false) }
   }
 
