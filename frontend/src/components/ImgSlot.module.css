@@ -1,0 +1,4 @@
+.slot{display:grid;place-content:center;gap:2px;text-align:center;background:#22c55e;color:#052e16;font-size:.65rem;line-height:1.2;border:1px dashed #166534;border-radius:12px;flex:none;overflow:hidden}
+.slot b{font-weight:600}
+.img{object-fit:cover;border-radius:12px;flex:none;display:block}
+.round{border-radius:50%}

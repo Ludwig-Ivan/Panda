@@ -28,14 +28,29 @@ function mockRecomendacion(m) {
 }
 
 export const mealsApi = {
-  async getHoy() {
-    if (MOCK) {
-      await wait(300)
-      const hoy = read().filter((m) => new Date(m.consumida_at).toDateString() === new Date().toDateString())
-      return { meta_kcal: 1800, comidas: hoy.sort((a, b) => a.consumida_at.localeCompare(b.consumida_at)).map(resumen) }
+async getHoy() {
+  if (MOCK) {
+    await wait(300)
+    const hoy = read().filter((m) => new Date(m.consumida_at).toDateString() === new Date().toDateString())
+    const comidas = hoy.sort((a, b) => a.consumida_at.localeCompare(b.consumida_at)).map(resumen)
+    const kcal = comidas.reduce((a, c) => a + c.kcal, 0)
+    return {
+      meta_kcal: 1800,
+      comidas,
+      // Simulado: vendrá del servidor cuando el esquema guarde macros, objetivo y peso.
+      macros: {
+        consumido: { p: Math.round((kcal * 0.25) / 4), c: Math.round((kcal * 0.45) / 4), g: Math.round((kcal * 0.3) / 9) },
+        meta: { p: 135, c: 180, g: 60 },
+      },
+      objetivo: { tipo: 'Perder peso', peso_inicial: 114, peso_actual: 108, peso_meta: 100 },
+      peso_semana: [
+        { d: 'Lun', v: 110.4 }, { d: 'Mar', v: 109.9 }, { d: 'Mié', v: 109.3 }, { d: 'Jue', v: 108.9 },
+        { d: 'Vie', v: 108.4 }, { d: 'Sáb', v: 108.1 }, { d: 'Dom', v: 108 },
+      ],
     }
-    return send('GET', '/comidas/hoy/') // { meta_kcal, comidas: [{ id, hora, nombre, kcal }] }
-  },
+  }
+  return send('GET', '/comidas/hoy/')
+},
 
   // Envía la foto; el servidor crea la comida en borrador y devuelve { comida_id, items }.
   async analyze(file) {

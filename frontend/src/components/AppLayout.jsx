@@ -1,7 +1,9 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import HelpChat from './HelpChat.jsx'
-import '../app.css'
-import logo from "../assets/logo.png"
+import ImgSlot from './ImgSlot.jsx'
+import { IMG } from '../data/imagenes.js'
+import s from './AppLayout.module.css'
+import '../app.css' // estilos de las demás pantallas (se irán migrando a módulos)
 
 // ready=false: pantalla aún no construida (se muestra deshabilitada).
 const NAV = [
@@ -12,28 +14,47 @@ const NAV = [
   { to: '/ajustes', label: 'Ajustes', icon: '⚙️', ready: false },
 ]
 
-const Item = ({ n, cls }) => n.ready
-  ? <NavLink to={n.to} className={({ isActive }) => `${cls}${isActive ? ' active' : ''}`}><span aria-hidden="true">{n.icon}</span>{n.label}</NavLink>
-  : <span className={`${cls} off`} aria-disabled="true"><span aria-hidden="true">{n.icon}</span>{n.label}<em className="soon">Pronto</em></span>
+function Item({ n, base }) {
+  return n.ready
+    ? <NavLink to={n.to} className={({ isActive }) => `${base}${isActive ? ` ${s.active}` : ''}`}><span aria-hidden="true">{n.icon}</span>{n.label}</NavLink>
+    : <span className={`${base} ${s.off}`} aria-disabled="true"><span aria-hidden="true">{n.icon}</span>{n.label}<em className={s.soon}>Pronto</em></span>
+}
+
+const Brand = () => (
+  <Link to="/inicio" className={s.brand}>
+    <ImgSlot src={IMG.logo} w={52} h={52} round label="Logo" alt="Panda" />
+    <span><b>PANDA</b><small>Come mejor, avanza más</small></span>
+  </Link>
+)
 
 export default function AppLayout() {
-  const [inicio, nueva, ...resto] = NAV
   return (
-    <div className="app-shell">
-      <aside className="side">
-        <Link to="/inicio" className="brand"><img className="logo" src = {logo}/>PANDA</Link>
-        <nav aria-label="Principal">{NAV.map((n) => <Item key={n.to} n={n} cls="nav-i" />)}</nav>
+    <div className={s.shell}>
+      <aside className={s.side}>
+        <Brand />
+        <nav className={s.nav} aria-label="Principal">{NAV.map((n) => <Item key={n.to} n={n} base={s.navItem} />)}</nav>
+        <div className={s.sideFoot}>
+          <ImgSlot src={IMG.hojasMenu} w={200} h={160} label="Hojas decorativas" />
+          <p>Pequeños cambios, grandes resultados.</p>
+        </div>
       </aside>
-      <div className="app-main">
-        <header className="app-top"><Link to="/inicio" className="brand"><span className="logo">🐼</span>PANDA</Link></header>
+
+      <div className={s.main}>
+        <header className={s.top}>
+          <Link to="/inicio" className={s.topBrand}><ImgSlot src={IMG.logo} w={36} h={36} round label="Logo" alt="Panda" /><b>PANDA</b></Link>
+          <input className={s.search} type="search" placeholder="Buscar alimentos, recetas y más… (próximamente)" disabled aria-label="Buscar (próximamente)" />
+          <button type="button" className={s.iconBtn} disabled aria-label="Notificaciones (próximamente)">🔔</button>
+          <div className={s.user}><ImgSlot src={IMG.avatar} w={36} h={36} round label="Foto" alt="Tu foto" /><span>Mi cuenta</span></div>
+        </header>
         <Outlet />
       </div>
-      <nav className="tabbar" aria-label="Principal móvil">
-        <Item n={inicio} cls="tab" />
-        <Item n={resto[0]} cls="tab" />
-        <NavLink to={nueva.to} className="tab-fab" aria-label="Registrar comida">＋</NavLink>
-        <Item n={resto[1]} cls="tab" />
-        <Item n={resto[2]} cls="tab" />
+
+      <nav className={s.tabbar} aria-label="Principal móvil">
+        <Item n={NAV[0]} base={s.tab} />
+        <Item n={NAV[2]} base={s.tab} />
+        <NavLink to={NAV[1].to} className={s.tabFab} aria-label="Registrar comida">＋</NavLink>
+        <Item n={NAV[3]} base={s.tab} />
+        <Item n={NAV[4]} base={s.tab} />
       </nav>
       <HelpChat />
     </div>
