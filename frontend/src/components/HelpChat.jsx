@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Orb from './Orb.jsx'
 import { mealsApi } from '../lib/mealsApi.js'
+import { X } from 'lucide-react'
 
 const SUGERENCIAS = ['¿Cómo registro una comida?', '¿Qué tan exactas son las calorías?', '¿Cómo corrijo un alimento?']
 
@@ -41,7 +42,7 @@ export default function HelpChat() {
         <section className="chat" role="dialog" aria-label="Asistente de ayuda">
           <header className="chat-head">
             <Orb size={28} pulse={false} /><b>Asistente de ayuda</b>
-            <button type="button" className="chat-x" onClick={() => setOpen(false)} aria-label="Cerrar">✕</button>
+            <button type="button" className="chat-x" onClick={() => setOpen(false)} aria-label="Cerrar"><X size={20} aria-hidden="true"/></button>
           </header>
           <div className="chat-body" aria-live="polite">
             {msgs.map((m, i) => <p key={i} className={`msg ${m.r}`}>{m.t}</p>)}

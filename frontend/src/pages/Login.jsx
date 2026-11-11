@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthShell from '../components/AuthShell.jsx'
 import Field from '../components/Field.jsx'
 import { api } from '../lib/api.js'
+import { EyeOff, Eye } from 'lucide-react'
 
 export default function Login() {
   const nav = useNavigate()
@@ -30,7 +31,7 @@ export default function Login() {
       <form onSubmit={submit} noValidate>
         <Field id="email" label="Correo" type="email" autoComplete="email" value={v.email} onChange={set('email')} />
         <Field id="password" label="Contraseña" type={show ? 'text' : 'password'} autoComplete="current-password" value={v.password} onChange={set('password')}>
-          <button type="button" className="eye" onClick={() => setShow((s) => !s)} aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{show ? 'Ocultar' : 'Ver'}</button>
+          <button type="button" className="eye" onClick={() => setShow((s) => !s)} aria-label={show ? 'Ocultar contraseña' : 'Mostrar contraseña'}>{show ? <EyeOff size={20} aria-hidden="true"/> : <Eye size={20} aria-hidden="true"/>}</button>
         </Field>
         <p className="hint right"><Link to="/recuperar">¿Olvidaste tu contraseña?</Link></p>
         {err && <p className="err box" role="alert">{err}</p>}

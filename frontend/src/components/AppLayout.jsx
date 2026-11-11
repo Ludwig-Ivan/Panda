@@ -4,14 +4,15 @@ import ImgSlot from './ImgSlot.jsx'
 import { IMG } from '../data/imagenes.js'
 import s from './AppLayout.module.css'
 import '../app.css' // estilos de las demás pantallas (se irán migrando a módulos)
+import { House, Plus, History, ChartColumn, Settings, Bell } from 'lucide-react'
 
 // ready=false: pantalla aún no construida (se muestra deshabilitada).
 const NAV = [
-  { to: '/inicio', label: 'Inicio', icon: '🏠', ready: true },
-  { to: '/comidas/nueva', label: 'Registrar comida', icon: '➕', ready: true },
-  { to: '/historial', label: 'Historial', icon: '🕘', ready: true },
-  { to: '/progreso', label: 'Progreso', icon: '📊', ready: false },
-  { to: '/ajustes', label: 'Ajustes', icon: '⚙️', ready: false },
+  { to: '/inicio', label: 'Inicio', icon: <House size={20} aria-hidden="true" />, ready: true },
+  { to: '/comidas/nueva', label: 'Registrar comida', icon: <Plus size={20} aria-hidden="true" />, ready: true },
+  { to: '/historial', label: 'Historial', icon: <History size={20} aria-hidden="true" />, ready: true },
+  { to: '/progreso', label: 'Progreso', icon: <ChartColumn size={20} aria-hidden="true" />, ready: false },
+  { to: '/ajustes', label: 'Ajustes', icon: <Settings size={20} aria-hidden="true" />, ready: false },
 ]
 
 function Item({ n, base }) {
@@ -43,7 +44,7 @@ export default function AppLayout() {
         <header className={s.top}>
           <Link to="/inicio" className={s.topBrand}><ImgSlot src={IMG.logo} w={36} h={36} round label="Logo" alt="Panda" /><b>PANDA</b></Link>
           <input className={s.search} type="search" placeholder="Buscar alimentos, recetas y más… (próximamente)" disabled aria-label="Buscar (próximamente)" />
-          <button type="button" className={s.iconBtn} disabled aria-label="Notificaciones (próximamente)">🔔</button>
+          <button type="button" className={s.iconBtn} disabled aria-label="Notificaciones (próximamente)"><Bell size={20} aria-hidden="true" /></button>
           <div className={s.user}><ImgSlot src={IMG.avatar} w={36} h={36} round label="Foto" alt="Tu foto" /><span>Mi cuenta</span></div>
         </header>
         <Outlet />
@@ -52,7 +53,7 @@ export default function AppLayout() {
       <nav className={s.tabbar} aria-label="Principal móvil">
         <Item n={NAV[0]} base={s.tab} />
         <Item n={NAV[2]} base={s.tab} />
-        <NavLink to={NAV[1].to} className={s.tabFab} aria-label="Registrar comida">＋</NavLink>
+        <NavLink to={NAV[1].to} className={s.tabFab} aria-label="Registrar comida"><Plus size={20} aria-hidden="true" /></NavLink>
         <Item n={NAV[3]} base={s.tab} />
         <Item n={NAV[4]} base={s.tab} />
       </nav>

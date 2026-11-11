@@ -4,6 +4,7 @@ import ImgSlot from '../components/ImgSlot.jsx'
 import { IMG } from '../data/imagenes.js'
 import { mealsApi } from '../lib/mealsApi.js'
 import s from './Home.module.css'
+import { ArrowBigDown, ArrowDown, ArrowRight, ArrowUp, Calendar, Camera, ChevronLeft, ChevronRight, Droplet, Drumstick, Dumbbell, Flame, Footprints, Lightbulb, Pencil, Plus, Target, TrendingDown, Utensils, Wheat } from 'lucide-react'
 
 const AGUA_META = 2500
 const TIPS = [
@@ -72,7 +73,7 @@ export default function Home() {
           <p className={s.sub}>{h && h.comidas.length ? 'Cada registro te acerca a tus objetivos.' : 'Empieza registrando tu primera comida de hoy.'}</p>
         </div>
         <div className={s.dateBox}>
-          <div><b className={s.date}>📅 {fecha}</b></div>
+          <div><b className={s.date}><Calendar size={20} aria-hidden="true" />{fecha}</b></div>
           <ImgSlot className={s.mascot} src={IMG.mascotaSaludo} w={120} h={90} label="Panda saludo" alt="" />
         </div>
       </header>
@@ -90,7 +91,7 @@ export default function Home() {
                 <div className={s.ringTxt}><b>{total}</b><span>kcal</span><small>de {h ? h.meta_kcal.toLocaleString('es-MX') : '…'}</small></div>
               </div>
               <div className={s.kcalInfo}>
-                <h2>🔥 Calorías</h2>
+                <h2><Flame size={20} aria-hidden="true" /> Calorías</h2>
                 <p>{!h ? 'Cargando…' : left >= 0 ? <>Restantes: <b>{left} kcal</b></> : <>Superaste tu meta por <b>{-left} kcal</b></>}</p>
                 <div className={s.barDark}><i style={{ width: `${Math.min((total / (h?.meta_kcal || 1)) * 100, 100)}%` }} /></div>
               </div>
@@ -99,7 +100,7 @@ export default function Home() {
             {h?.macros && (
               <section className={s.card} aria-label="Macros">
                 <h2>Macros</h2>
-                {[['p', 'Proteínas', '🍗'], ['c', 'Carbohidratos', '🌾'], ['g', 'Grasas', '💧']].map(([k, n, ic]) => (
+                {[['p', 'Proteínas', <Drumstick size={20} aria-hidden="true" />], ['c', 'Carbohidratos', <Wheat size={20} aria-hidden="true" />], ['g', 'Grasas', <Droplet size={20} aria-hidden="true" />]].map(([k, n, ic]) => (
                   <div className={s.macro} key={k}>
                     <span className={s.macroIco} aria-hidden="true">{ic}</span><span>{n}</span>
                     <span>{h.macros.consumido[k]} g / {h.macros.meta[k]} g</span>
@@ -111,7 +112,7 @@ export default function Home() {
           </div>
 
           <section className={s.card} aria-label="Comidas de hoy">
-            <div className={s.rowBetween}><h2>🍴 Comidas de hoy</h2><Link className={s.link} to="/historial">Ver todas →</Link></div>
+            <div className={s.rowBetween}><h2><Utensils size={20} aria-hidden="true" /> Comidas de hoy</h2><Link className={s.link} to="/historial">Ver todas <ArrowRight size={20} aria-hidden="true" /></Link></div>
             {h && h.comidas.length === 0 && <p className={s.muted}>Aún no registras comidas hoy.</p>}
             <ul className={s.meals}>
               {h?.comidas.map((c) => (
@@ -124,32 +125,32 @@ export default function Home() {
                       <small>{c.kcal} kcal{c.macros && <>   P {c.macros.p} g   C {c.macros.c} g   G {c.macros.g} g</>}</small>
                     </span>
                     <time>{c.consumida_at ? new Date(c.consumida_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) : c.hora}</time>
-                    <span aria-hidden="true">›</span>
+                    <span aria-hidden="true"><ChevronRight size={20} aria-hidden="true" /></span>
                   </Link>
                 </li>
               ))}
             </ul>
             <div className={s.actions}>
-              <Link className={s.primary} to="/comidas/nueva"><b>＋ Registrar comida</b><small>Añade lo que comiste con una foto o de forma manual</small></Link>
-              <Link className={s.ghost} to="/comidas/nueva/foto"><b>📷 Escanear alimento</b><small>Usa la cámara para un registro rápido</small></Link>
+              <Link className={s.primary} to="/comidas/nueva"><b><Plus size={20} aria-hidden="true" /> Registrar comida</b><small>Añade lo que comiste con una foto o de forma manual</small></Link>
+              <Link className={s.ghost} to="/comidas/nueva/foto"><b><Camera size={20} aria-hidden="true" /> Escanear alimento</b><small>Usa la cámara para un registro rápido</small></Link>
             </div>
           </section>
 
           <div className={s.trio}>
             <div className={s.mini}>
-              <span className={s.miniIco} aria-hidden="true">💧</span>
+              <span className={s.miniIco} aria-hidden="true"><Droplet size={20} aria-hidden="true" /></span>
               <div><b>Hidratación</b><small>{(agua / 1000).toFixed(1)} L de {(AGUA_META / 1000).toFixed(1)} L</small><div className={s.bar}><i style={{ width: `${(agua / AGUA_META) * 100}%` }} /></div></div>
-              <button type="button" className={s.round} onClick={() => addAgua(250)} aria-label="Añadir 250 mililitros de agua">＋</button>
+              <button type="button" className={s.round} onClick={() => addAgua(250)} aria-label="Añadir 250 mililitros de agua"><Plus size={20} aria-hidden="true" /></button>
             </div>
-            <div className={`${s.mini} ${s.soonCard}`} aria-disabled="true"><span className={s.miniIco} aria-hidden="true">🏃</span><div><b>Actividad</b><small>Próximamente</small></div></div>
-            <div className={`${s.mini} ${s.soonCard}`} aria-disabled="true"><span className={s.miniIco} aria-hidden="true">🏋️</span><div><b>Entrenamiento</b><small>Próximamente</small></div></div>
+            <div className={`${s.mini} ${s.soonCard}`} aria-disabled="true"><span className={s.miniIco} aria-hidden="true"><Footprints size={20} aria-hidden="true" /></span><div><b>Actividad</b><small>Próximamente</small></div></div>
+            <div className={`${s.mini} ${s.soonCard}`} aria-disabled="true"><span className={s.miniIco} aria-hidden="true"><Dumbbell size={20} aria-hidden="true" /></span><div><b>Entrenamiento</b><small>Próximamente</small></div></div>
           </div>
         </div>
 
         <aside className={s.sideCol}>
           {o && (
             <section className={s.goal} aria-label="Tu objetivo">
-              <div className={s.goalHead}><span aria-hidden="true">🎯</span><div><small>Tu objetivo</small><h2>{o.tipo}</h2></div><button type="button" className={s.edit} disabled aria-label="Editar objetivo (próximamente)">✎</button></div>
+              <div className={s.goalHead}><span aria-hidden="true"><Target size={20} aria-hidden="true" /></span><div><small>Tu objetivo</small><h2>{o.tipo}</h2></div><button type="button" className={s.edit} disabled aria-label="Editar objetivo (próximamente)"><Pencil size={20} aria-hidden="true" /></button></div>
               <div className={s.goalNums}><div><small>Meta de peso</small><b>{o.peso_meta} kg</b></div><div><small>Peso actual</small><b>{o.peso_actual} kg</b></div></div>
               <div><small>Progreso</small><div className={s.barLight}><i style={{ width: `${progreso * 100}%` }} /></div><b className={s.goalDelta}>{(o.peso_actual - o.peso_inicial).toFixed(0)} kg</b></div>
             </section>
@@ -157,17 +158,17 @@ export default function Home() {
 
           {semana && (
             <section className={`${s.card} ${s.dark}`} aria-label="Progreso semanal">
-              <div className={s.rowBetween}><h2>📈 Tu progreso semanal</h2>{delta && <span className={s.pill}>{delta} kg {Number(delta) <= 0 ? '↓' : '↑'}</span>}</div>
+              <div className={s.rowBetween}><h2><TrendingDown size={20} aria-hidden="true" /> Tu progreso semanal</h2>{delta && <span className={s.pill}>{delta} kg {Number(delta) <= 0 ? <ArrowDown size={20} aria-hidden="true" /> : <ArrowUp size={20} aria-hidden="true" />}</span>}</div>
               <Chart data={semana} />
             </section>
           )}
 
           <section className={`${s.card} ${s.tips}`} aria-label="Consejos de hoy">
-            <h2>💡 Consejos de hoy</h2>
+            <h2><Lightbulb size={20} aria-hidden="true" /> Consejos de hoy</h2>
             <div className={s.tipBody}>
-              <button type="button" onClick={() => setTip((t) => (t + TIPS.length - 1) % TIPS.length)} aria-label="Consejo anterior">‹</button>
+              <button type="button" onClick={() => setTip((t) => (t + TIPS.length - 1) % TIPS.length)} aria-label="Consejo anterior"><ChevronLeft size={20} aria-hidden="true" /></button>
               <p aria-live="polite">{TIPS[tip]}</p>
-              <button type="button" onClick={() => setTip((t) => (t + 1) % TIPS.length)} aria-label="Consejo siguiente">›</button>
+              <button type="button" onClick={() => setTip((t) => (t + 1) % TIPS.length)} aria-label="Consejo siguiente"><ChevronRight size={20} aria-hidden="true" /></button>
             </div>
             <div className={s.dots}>{TIPS.map((_, i) => <i key={i} className={i === tip ? s.dotOn : ''} />)}</div>
           </section>

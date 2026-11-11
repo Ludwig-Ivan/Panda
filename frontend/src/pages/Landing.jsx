@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Orb from '../components/Orb.jsx'
+import { Camera, Flame, Footprints } from 'lucide-react'
 
 const features = [
-  ['🔥', 'Calorías y macros', 'Registra lo que comes y ve cuánto te queda en el día.'],
-  ['📷', 'Registro con foto', 'Fotografía tu plato y revisa la estimación antes de confirmarla.'],
-  ['🏃', 'Actividad recomendada', 'Sugerencias para equilibrar cada comida según tus preferencias.'],
+  [<Flame size={20} aria-hidden="true"/>, 'Calorías y macros', 'Registra lo que comes y ve cuánto te queda en el día.'],
+  [<Camera size={20} aria-hidden="true"/>, 'Registro con foto', 'Fotografía tu plato y revisa la estimación antes de confirmarla.'],
+  [<Footprints size={20} aria-hidden="true"/>, 'Actividad recomendada', 'Sugerencias para equilibrar cada comida según tus preferencias.'],
 ]
 const steps = [
   ['Define tu perfil', 'Indica tu edad, peso, estatura y nivel de actividad.'],

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMealDraft } from '../../context/MealDraft.jsx'
+import { Camera } from 'lucide-react'
 
 const MAX_MB = 10
 
@@ -29,11 +30,11 @@ export default function Captura() {
 
       <div className="row-btns">
         <label className="btn">
-          📷 Tomar foto
+          <Camera size={20} aria-hidden="true"/> Tomar foto
           <input type="file" accept="image/*" capture="environment" onChange={pick} hidden />
         </label>
         <label className="btn">
-          🖼️ Elegir de galería
+          <Image size={20} aria-hidden="true"/> Elegir de galería
           <input type="file" accept="image/*" onChange={pick} hidden />
         </label>
       </div>
