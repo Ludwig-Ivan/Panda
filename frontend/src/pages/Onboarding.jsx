@@ -8,6 +8,7 @@ import StepFotos from './onboarding/StepFotos.jsx'
 import { api } from '../lib/api.js'
 import { AVISOS, VERSION } from '../data/avisos.js'
 import '../onboarding.css'
+import logo from '../assets/logo.png'
 
 const TITLES = ['Antes de empezar', 'Cuéntanos sobre ti', 'Tus actividades favoritas', 'Tus fotos']
 
@@ -68,7 +69,7 @@ export default function Onboarding() {
 
   return (
     <main className="auth onb-wrap">
-      <div className="onb-top"><span className="brand"><span className="logo">🐼</span>PANDA</span></div>
+      <div className="onb-top"><span className="brand"><img src={logo} className='logo'/><b>PANDA</b></span></div>
       <div className="auth-card onb">
         <div className="onb-head">
           <Orb size={36} />

@@ -8,7 +8,7 @@ export default function PublicLayout() {
     <>
       <header className="top">
         <div className="wrap row">
-          <Link to="/" className="brand"><img className="logo" src = {logo}/>Panda</Link>
+          <Link to="/" className="brand"><img className={"logo"}src={logo}/><b>PANDA</b></Link>
           {home && (
             <nav className="links">
               <a href="#funciones">Funciones</a><a href="#calculadora">Calculadora</a><a href="#como">Cómo funciona</a>
