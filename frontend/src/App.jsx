@@ -19,6 +19,12 @@ import Confirmar from './pages/meal/Confirmar.jsx'
 import ComidaDetalle from './pages/ComidaDetalle.jsx'
 import Recomendacion from './pages/Recomendacion.jsx'
 import Historial from './pages/Historial.jsx'
+import Ajustes from './pages/ajustes/Ajustes.jsx'
+import Perfil from './pages/ajustes/Perfil.jsx'
+import Actividades from './pages/ajustes/Actividades.jsx'
+import Privacidad from './pages/ajustes/Privacidad.jsx'
+import EliminarHistorial from './pages/ajustes/EliminarHistorial.jsx'
+import EliminarCuenta from './pages/ajustes/EliminarCuenta.jsx'
 
 export default function App() {
   return (
@@ -46,6 +52,13 @@ export default function App() {
         <Route path="comidas/:id/actividad" element={<Recomendacion />} />
         <Route path="historial" element={<Historial />} />
       </Route>
+
+<Route path="ajustes" element={<Ajustes />} />
+<Route path="ajustes/perfil" element={<Perfil />} />
+<Route path="ajustes/actividades" element={<Actividades />} />
+<Route path="ajustes/privacidad" element={<Privacidad />} />
+<Route path="ajustes/historial" element={<EliminarHistorial />} />
+<Route path="ajustes/cuenta" element={<EliminarCuenta />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

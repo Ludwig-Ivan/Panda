@@ -12,7 +12,7 @@ const NAV = [
   { to: '/comidas/nueva', label: 'Registrar comida', icon: <Plus size={20} aria-hidden="true" />, ready: true },
   { to: '/historial', label: 'Historial', icon: <History size={20} aria-hidden="true" />, ready: true },
   { to: '/progreso', label: 'Progreso', icon: <ChartColumn size={20} aria-hidden="true" />, ready: false },
-  { to: '/ajustes', label: 'Ajustes', icon: <Settings size={20} aria-hidden="true" />, ready: false },
+  { to: '/ajustes', label: 'Ajustes', icon: <Settings size={20} aria-hidden="true" />, ready: true },
 ]
 
 function Item({ n, base }) {
