@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMealDraft, calc, totals } from '../../context/MealDraft.jsx'
 import { mealsApi } from '../../lib/mealsApi.js'
-import '../../app2.css'
 
 const localNow = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16) }
 

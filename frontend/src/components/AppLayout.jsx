@@ -3,7 +3,6 @@ import HelpChat from './HelpChat.jsx'
 import ImgSlot from './ImgSlot.jsx'
 import { IMG } from '../data/imagenes.js'
 import s from './AppLayout.module.css'
-import '../app.css' // estilos de las demás pantallas (se irán migrando a módulos)
 import { House, Plus, History, ChartColumn, Settings, Bell } from 'lucide-react'
 
 // ready=false: pantalla aún no construida (se muestra deshabilitada).
