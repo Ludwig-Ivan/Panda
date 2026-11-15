@@ -1,0 +1,95 @@
+name: backend-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  calidad-y-pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: panda
+          POSTGRES_PASSWORD: panda
+          POSTGRES_DB: panda_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U panda"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DJANGO_SETTINGS_MODULE: config.settings.test
+      DJANGO_SECRET_KEY: solo-para-ci-no-es-secreto
+      DATABASE_URL: postgres://panda:panda@localhost:5432/panda_test
+      STORAGE_BACKEND: memory
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/requirements/*.txt
+
+      - name: Dependencias
+        run: pip install -r requirements/dev.txt
+
+      - name: Lint y formato
+        run: ruff check . && ruff format --check .
+
+      - name: Tipos
+        run: mypy panda config
+
+      - name: Capas
+        run: lint-imports
+
+      - name: Migraciones al día
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Contrato OpenAPI
+        run: |
+          python manage.py spectacular --file /tmp/openapi.yaml --validate --fail-on-warn
+          diff -u openapi.yaml /tmp/openapi.yaml
+
+      - name: Pruebas
+        run: |
+          pytest --cov=panda --cov-report=term-missing
+          coverage report --include="panda/dominio/*" --fail-under=80
+
+      - name: Configuración de producción
+        run: |
+          export DJANGO_SECRET_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(64))")
+          DJANGO_SETTINGS_MODULE=config.settings.prod ALLOWED_HOSTS=api.panda.app STORAGE_BACKEND=memory \
+            python manage.py check --deploy --fail-level WARNING
+
+      - name: Vulnerabilidades en dependencias
+        run: pip-audit -r requirements/base.txt
+
+  secretos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
