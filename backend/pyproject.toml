@@ -1,0 +1,34 @@
+[tool.pytest.ini_options]
+addopts = "--ds=config.settings.test -ra --strict-markers"
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["panda"]
+omit = ["*/migrations/*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["*/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "BLE", "SIM"]
+ignore = [
+    "S101",   # assert en pruebas
+    "DJ001",  # CharField null=True es intencional (Diseño de BD: NULL = "sin dato")
+    "DJ008",  # no todos los modelos necesitan __str__
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106"]
+"config/settings/dev.py" = ["S104"]   # 0.0.0.0 solo dentro de Docker
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+ignore_missing_imports = true
+exclude = ["migrations/"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"

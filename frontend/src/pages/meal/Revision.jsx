@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useMealDraft, newItem, calc, totals } from '../../context/MealDraft.jsx'
-import '../../app2.css'
 
 const inRange = (v, a, b) => Number(v) >= a && Number(v) <= b
 

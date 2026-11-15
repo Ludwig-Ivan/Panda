@@ -1,0 +1,23 @@
+name: rama-origen
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions: {}
+
+jobs:
+  origen-permitido:
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Verificar rama de origen
+        env:
+          ORIGEN: ${{ github.head_ref }}
+        run: |
+          if [[ "$ORIGEN" == "develop" || "$ORIGEN" == hotfix/* ]]; then
+            echo "Origen permitido: $ORIGEN"
+          else
+            echo "::error::A main solo se fusiona desde develop o hotfix/*. Esta rama es: $ORIGEN"
+            exit 1
+          fi

@@ -1,0 +1,12 @@
+-r base.txt
+pytest>=8
+pytest-django>=4.9
+pytest-cov>=5
+hypothesis>=6
+ruff>=0.7
+mypy>=1.11
+django-stubs[compatible-mypy]>=5.1
+djangorestframework-stubs>=3.15
+import-linter>=2.1
+pre-commit>=4
+pip-audit>=2.7
