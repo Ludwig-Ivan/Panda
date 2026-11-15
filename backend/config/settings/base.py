@@ -81,7 +81,7 @@ DATABASES["default"]["CONN_HEALTH_CHECKS"] = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- Usuarios y contraseñas ---------------------------------------------
-AUTH_USER_MODEL = "identidad.Usuario" 
+AUTH_USER_MODEL = "identidad.Usuario"
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.Argon2PasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -116,10 +116,10 @@ if STORAGE_BACKEND == "r2":
             "secret_key": env("R2_SECRET_ACCESS_KEY"),
             "region_name": "auto",
             "signature_version": "s3v4",
-            "default_acl": None,          # R2 no usa ACL; el bucket es privado
-            "querystring_auth": True,     # URLs prefirmadas
-            "querystring_expire": 600,    # 10 minutos
-            "file_overwrite": True,       # la clave ya es única (UUID de la comida)
+            "default_acl": None,  # R2 no usa ACL; el bucket es privado
+            "querystring_auth": True,  # URLs prefirmadas
+            "querystring_expire": 600,  # 10 minutos
+            "file_overwrite": True,  # la clave ya es única (UUID de la comida)
             "object_parameters": {"ContentType": "image/webp", "CacheControl": "private, max-age=600"},
         },
     }
@@ -136,8 +136,8 @@ STORAGES = {
 }
 
 # Límites de carga (API Specification §8)
-DATA_UPLOAD_MAX_MEMORY_SIZE = 65_536          # 64 KB para cuerpos que no son archivos
-FILE_UPLOAD_MAX_MEMORY_SIZE = 2_621_440       # > 2.5 MB se escribe a disco temporal
+DATA_UPLOAD_MAX_MEMORY_SIZE = 65_536  # 64 KB para cuerpos que no son archivos
+FILE_UPLOAD_MAX_MEMORY_SIZE = 2_621_440  # > 2.5 MB se escribe a disco temporal
 
 # --- Caché ---------------------------------------------------------------
 CACHES = {
@@ -163,7 +163,7 @@ REST_FRAMEWORK = {
     },
     "EXCEPTION_HANDLER": "panda.comun.errores.manejar_excepcion",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "COERCE_DECIMAL_TO_STRING": False,   # los Decimal salen como números JSON
+    "COERCE_DECIMAL_TO_STRING": False,  # los Decimal salen como números JSON
 }
 
 # --- JWT -----------------------------------------------------------------
@@ -199,7 +199,6 @@ SPECTACULAR_SETTINGS = {
         {"url": "https://api.panda.app/api/v1", "description": "Producción (provisional)"},
     ],
     "COMPONENT_SPLIT_REQUEST": True,
-    
     "ENUM_NAME_OVERRIDES": {
         "EstadoComidaEnum": "panda.comidas.models.EstadoComida",
         "OrigenComidaEnum": "panda.comidas.models.OrigenComida",
@@ -220,7 +219,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = (*default_headers, "idempotency-key", "x-request-id", "x-confirm")
 CORS_EXPOSE_HEADERS = ["x-request-id", "location", "retry-after"]
 
-APPEND_SLASH = False                 # rutas sin barra final (API §2)
+APPEND_SLASH = False  # rutas sin barra final (API §2)
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
 X_FRAME_OPTIONS = "DENY"
@@ -228,7 +227,7 @@ ADMIN_URL = env("ADMIN_URL", default="admin-dev/")
 ADMIN_REQUIERE_OTP = env.bool("ADMIN_REQUIERE_OTP", default=False)
 
 # --- Parámetros del negocio (RNF-MA-04: fuera del código) -----------------
-PANDA: dict[str, Any] = {   # anotado para que mypy permita settings.PANDA["..."]["..."]
+PANDA: dict[str, Any] = {  # anotado para que mypy permita settings.PANDA["..."]["..."]
     "CONSENTIMIENTOS_VIGENTES": {
         "privacidad": env("CONSENT_PRIVACIDAD", default="2026-10"),
         "avisos_salud": env("CONSENT_AVISOS_SALUD", default="2026-10"),

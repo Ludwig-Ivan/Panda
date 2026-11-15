@@ -20,6 +20,6 @@ if SENTRY_DSN := env("SENTRY_DSN", default=""):  # noqa: F405
         dsn=SENTRY_DSN,
         environment=ENV,  # noqa: F405
         release=APP_VERSION,  # noqa: F405
-        send_default_pii=False,   # nunca correos ni IPs
+        send_default_pii=False,  # nunca correos ni IPs
         traces_sample_rate=0.1,
     )
