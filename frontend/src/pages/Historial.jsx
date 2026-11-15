@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { mealsApi } from '../lib/mealsApi.js'
-import '../app2.css'
 
 const dayLabel = (iso) => {
   const d = new Date(iso), today = new Date(), y = new Date(); y.setDate(today.getDate() - 1)

@@ -76,3 +76,18 @@
   .kcal{flex-direction:column;text-align:center}.kcalInfo{width:100%}
   .meal{grid-template-columns:64px minmax(0,1fr) 12px}.meal time{display:none}
 }
+
+/* Alineación de iconos (Lucide) */
+.home :global(.lucide){flex:none}
+.date{text-transform:none;display:inline-flex;align-items:center;gap:8px}          /* calendario */
+.card h2,.goal h2{display:flex;align-items:center;gap:8px}                          /* foco, llama, cubiertos */
+.goalHead>span{display:grid;place-items:center;flex:none}                           /* objetivo */
+.edit{display:grid;place-items:center;padding:0;flex:none}                          /* lápiz */
+.round{display:grid;place-items:center;padding:0}                                   /* + de agua */
+.primary b,.ghost b{display:flex;align-items:center;gap:8px}                        /* + registrar y cámara */
+.link{display:inline-flex;align-items:center;gap:4px}                               /* "Ver todas" */
+.pill{display:inline-flex;align-items:center;gap:4px}                               /* cambio de peso */
+.tipBody button{display:grid;place-items:center}                                    /* flechas de consejos */
+.macroIco svg,.miniIco svg{width:18px;height:18px}
+.macroIco{color:#fff}
+.miniIco{color:var(--or)}
