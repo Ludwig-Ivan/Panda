@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { mealsApi } from '../lib/mealsApi.js'
-import '../app2.css'
 
 export default function Recomendacion() {
   const { id } = useParams()

@@ -1,6 +1,7 @@
 // Cliente de la API de Django. Los endpoints son supuestos: ajústalos a la API Specification.
 // Con VITE_USE_MOCK=true (por defecto) responde sin backend para probar el diseño.
 import { ACTIVIDADES_MOCK } from '../data/actividades.js'
+import { mockUser } from './mockStore.js'
 
 const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 const MOCK = import.meta.env.VITE_USE_MOCK !== 'false'
@@ -34,13 +35,16 @@ export const api = {
     return data.results || data
   },
 
-  // Onboarding: cada llamada corresponde a una tabla del diseño de base de datos.
   async completeOnboarding(b) {
-    await send('POST', '/consentimientos/', b.consentimientos)        // consentimientos
-    await send('PUT', '/perfil/', b.perfil)                           // perfiles
-    await send('PUT', '/preferencias-actividad/', { actividades: b.actividades }) // preferencias_actividad
-    await send('PATCH', '/usuarios/me/', { guardar_fotos: b.guardar_fotos })      // usuarios.guardar_fotos
-  },
+  if (MOCK) {
+    await wait(300)
+    mockUser.save({
+      perfil: b.perfil, actividades: b.actividades, guardar_fotos: b.guardar_fotos,
+      consentimientos: b.consentimientos.map((c) => ({ ...c, aceptado_at: new Date().toISOString() })),
+    })
+    return
+  }
+},
 }
 
 export { send, BASE, MOCK, wait }

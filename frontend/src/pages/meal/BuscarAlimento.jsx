@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMealDraft, newItem } from '../../context/MealDraft.jsx'
 import { mealsApi } from '../../lib/mealsApi.js'
-import '../../app2.css'
 
 export default function BuscarAlimento() {
   const nav = useNavigate()
