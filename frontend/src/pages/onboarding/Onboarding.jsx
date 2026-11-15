@@ -7,7 +7,7 @@ import StepActividades from './StepActividades.jsx'
 import StepFotos from './StepFotos.jsx'
 import { api } from '../../lib/api.js'
 import { AVISOS, VERSION } from '../../data/avisos.js'
-import logo from '../../assets/logo.png'
+import logo from '../../assets/img/logo.png'
 import "./onboarding.css"
 
 const TITLES = ['Antes de empezar', 'Cuéntanos sobre ti', 'Tus actividades favoritas', 'Tus fotos']

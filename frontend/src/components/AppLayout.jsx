@@ -1,9 +1,13 @@
+import { useState, useEffect } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
 import HelpChat from './HelpChat.jsx'
 import ImgSlot from './ImgSlot.jsx'
-import { IMG } from '../data/imagenes.js'
 import s from './AppLayout.module.css'
 import { House, Plus, History, ChartColumn, Settings, Bell } from 'lucide-react'
+
+// Importación directa de recursos estáticos desde assets según tu estructura
+import logoImg from '../assets/img/logo.png'
+import hojasMenuImg from '../assets/img/panel-lateral.png'
 
 // ready=false: pantalla aún no construida (se muestra deshabilitada).
 const NAV = [
@@ -22,29 +26,57 @@ function Item({ n, base }) {
 
 const Brand = () => (
   <Link to="/inicio" className={s.brand}>
-    <ImgSlot src={IMG.logo} w={52} h={52} round label="Logo" alt="Panda" />
+    <ImgSlot src={logoImg} w={52} h={52} round label="Logo" alt="Panda" />
     <span><b>PANDA</b><small>Come mejor, avanza más</small></span>
   </Link>
 )
 
 export default function AppLayout() {
+  const [showHelpChat, setShowHelpChat] = useState(true)
+  const [lastScrollTop, setLastScrollTop] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.pageYOffset || document.documentElement.scrollTop
+      
+      if (currentScroll > lastScrollTop && currentScroll > 50) {
+        // Scroll hacia ABAJO -> Ocultar HelpChat
+        setShowHelpChat(false)
+      } else {
+        // Scroll hacia ARRIBA (o al inicio) -> Mostrar HelpChat
+        setShowHelpChat(true)
+      }
+      
+      setLastScrollTop(currentScroll <= 0 ? 0 : currentScroll)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollTop])
+
   return (
     <div className={s.shell}>
       <aside className={s.side}>
         <Brand />
         <nav className={s.nav} aria-label="Principal">{NAV.map((n) => <Item key={n.to} n={n} base={s.navItem} />)}</nav>
         <div className={s.sideFoot}>
-          <ImgSlot src={IMG.hojasMenu} w={200} h={160} label="Hojas decorativas" />
+          <ImgSlot src={hojasMenuImg} w={200} h={160} label="Hojas decorativas" />
           <p>Pequeños cambios, grandes resultados.</p>
         </div>
       </aside>
 
       <div className={s.main}>
         <header className={s.top}>
-          <Link to="/inicio" className={s.topBrand}><ImgSlot src={IMG.logo} w={36} h={36} round label="Logo" alt="Panda" /><b>PANDA</b></Link>
+          <Link to="/inicio" className={s.topBrand}>
+            <ImgSlot src={logoImg} w={36} h={36} round label="Logo" alt="Panda" />
+            <b>PANDA</b>
+          </Link>
           <input className={s.search} type="search" placeholder="Buscar alimentos, recetas y más… (próximamente)" disabled aria-label="Buscar (próximamente)" />
           <button type="button" className={s.iconBtn} disabled aria-label="Notificaciones (próximamente)"><Bell size={20} aria-hidden="true" /></button>
-          <div className={s.user}><ImgSlot src={IMG.avatar} w={36} h={36} round label="Foto" alt="Tu foto" /><span>Mi cuenta</span></div>
+          <div className={s.user}>
+            <ImgSlot src={logoImg} w={36} h={36} round label="Foto" alt="Tu foto" />
+            <span>Mi cuenta</span>
+          </div>
         </header>
         <Outlet />
       </div>
@@ -56,7 +88,10 @@ export default function AppLayout() {
         <Item n={NAV[3]} base={s.tab} />
         <Item n={NAV[4]} base={s.tab} />
       </nav>
-      <HelpChat />
+
+      <div className={`${s.helpChatWrapper} ${!showHelpChat ? s.hidden : ''}`}>
+        <HelpChat />
+      </div>
     </div>
   )
 }

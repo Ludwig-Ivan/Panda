@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ImgSlot from '../components/ImgSlot.jsx'
-import { IMG } from '../data/imagenes.js'
 import { mealsApi } from '../lib/mealsApi.js'
 import s from './Home.module.css'
-import { ArrowBigDown, ArrowDown, ArrowRight, ArrowUp, Calendar, Camera, ChevronLeft, ChevronRight, Droplet, Drumstick, Dumbbell, Flame, Footprints, Lightbulb, Pencil, Plus, Target, TrendingDown, Utensils, Wheat } from 'lucide-react'
+import { 
+  ArrowDown, ArrowRight, ArrowUp, Calendar, Camera, 
+  ChevronLeft, ChevronRight, Droplet, Drumstick, Dumbbell, 
+  Flame, Footprints, Lightbulb, Pencil, Plus, Target, 
+  TrendingDown, Utensils, Wheat 
+} from 'lucide-react'
+
+// Imágenes estáticas directas desde assets
+import panda1 from '../assets/img/banner.png'
+import panda2 from '../assets/img/panel-lateral.png'
 
 const AGUA_META = 2500
 const TIPS = [
@@ -13,12 +21,18 @@ const TIPS = [
   'Registra tus comidas en el momento: es más fácil recordar las porciones.',
   'Dormir bien ayuda a regular el hambre y mejora tus resultados.',
 ]
-const tipoComida = (iso) => { const h = new Date(iso).getHours(); return h < 11 ? 'Desayuno' : h < 17 ? 'Comida' : h < 22 ? 'Cena' : 'Snack' }
+
+const tipoComida = (iso) => { 
+  const h = new Date(iso).getHours() 
+  return h < 11 ? 'Desayuno' : h < 17 ? 'Comida' : h < 22 ? 'Cena' : 'Snack' 
+}
 
 // Hidratación guardada solo en este dispositivo (aún no existe tabla en la base de datos).
 const keyAgua = () => `panda_agua_${new Date().toDateString()}`
 function useAgua() {
-  const [v, setV] = useState(() => { try { return Number(localStorage.getItem(keyAgua())) || 0 } catch { return 0 } })
+  const [v, setV] = useState(() => { 
+    try { return Number(localStorage.getItem(keyAgua())) || 0 } catch { return 0 } 
+  })
   const add = (ml) => {
     const n = Math.min(v + ml, AGUA_META)
     setV(n)
@@ -35,15 +49,24 @@ function Chart({ data }) {
   const x = (i) => L + (i * (W - L - R)) / (data.length - 1)
   const y = (v) => T + ((max - v) / (max - min)) * (H - T - B)
   const pts = data.map((p, i) => `${x(i)},${y(p.v)}`).join(' ')
+  
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={s.chart} role="img" aria-label="Gráfica de peso de la semana">
       {[min, Math.round((min + max) / 2), max].map((g) => (
-        <g key={g}><line x1={L} x2={W - R} y1={y(g)} y2={y(g)} stroke="#2e2622" /><text x="2" y={y(g) + 3}>{g}</text></g>
+        <g key={g}>
+          <line x1={L} x2={W - R} y1={y(g)} y2={y(g)} stroke="#2e2622" />
+          <text x="2" y={y(g) + 3}>{g}</text>
+        </g>
       ))}
       <polygon points={`${x(0)},${H - B} ${pts} ${x(data.length - 1)},${H - B}`} fill="#f9731622" />
       <polyline points={pts} fill="none" stroke="#f97316" strokeWidth="2" />
       {data.map((p, i) => (
-        <g key={p.d}><circle cx={x(i)} cy={y(p.v)} r="3.5" fill="#f97316"><title>{p.d}: {p.v} kg</title></circle><text x={x(i) - 8} y={H - 8}>{p.d}</text></g>
+        <g key={p.d}>
+          <circle cx={x(i)} cy={y(p.v)} r="3.5" fill="#f97316">
+            <title>{p.d}: {p.v} kg</title>
+          </circle>
+          <text x={x(i) - 8} y={H - 8}>{p.d}</text>
+        </g>
       ))}
     </svg>
   )
@@ -54,7 +77,10 @@ export default function Home() {
   const [failed, setFailed] = useState(false)
   const [tip, setTip] = useState(0)
   const [agua, addAgua] = useAgua()
-  useEffect(() => { mealsApi.getHoy().then(setH).catch(() => setFailed(true)) }, [])
+  
+  useEffect(() => { 
+    mealsApi.getHoy().then(setH).catch(() => setFailed(true)) 
+  }, [])
 
   const fecha = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
   const total = h ? h.comidas.reduce((a, c) => a + c.kcal, 0) : 0
@@ -74,9 +100,10 @@ export default function Home() {
         </div>
         <div className={s.dateBox}>
           <div><b className={s.date}><Calendar size={20} aria-hidden="true" />{fecha}</b></div>
-          <ImgSlot className={s.mascot} src={IMG.mascotaSaludo} w={120} h={90} label="Panda saludo" alt="" />
+          <ImgSlot className={s.mascot} src={panda1} w={120} h={90} label="Panda saludo" alt="" />
         </div>
       </header>
+
       {failed && <p className={s.error} role="alert">No pudimos cargar tu resumen. Inténtalo de nuevo más tarde.</p>}
 
       <div className={s.dash}>
@@ -112,7 +139,10 @@ export default function Home() {
           </div>
 
           <section className={s.card} aria-label="Comidas de hoy">
-            <div className={s.rowBetween}><h2><Utensils size={20} aria-hidden="true" /> Comidas de hoy</h2><Link className={s.link} to="/historial">Ver todas <ArrowRight size={20} aria-hidden="true" /></Link></div>
+            <div className={s.rowBetween}>
+              <h2><Utensils size={20} aria-hidden="true" /> Comidas de hoy</h2>
+              <Link className={s.link} to="/historial">Ver todas <ArrowRight size={20} aria-hidden="true" /></Link>
+            </div>
             {h && h.comidas.length === 0 && <p className={s.muted}>Aún no registras comidas hoy.</p>}
             <ul className={s.meals}>
               {h?.comidas.map((c) => (
@@ -122,7 +152,7 @@ export default function Home() {
                     <span className={s.mealTxt}>
                       {c.consumida_at && <small>{tipoComida(c.consumida_at)}</small>}
                       <b>{c.nombre}</b>
-                      <small>{c.kcal} kcal{c.macros && <>   P {c.macros.p} g   C {c.macros.c} g   G {c.macros.g} g</>}</small>
+                      <small>{c.kcal} kcal{c.macros && <> &nbsp; P {c.macros.p} g &nbsp; C {c.macros.c} g &nbsp; G {c.macros.g} g</>}</small>
                     </span>
                     <time>{c.consumida_at ? new Date(c.consumida_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) : c.hora}</time>
                     <span aria-hidden="true"><ChevronRight size={20} aria-hidden="true" /></span>
@@ -150,15 +180,29 @@ export default function Home() {
         <aside className={s.sideCol}>
           {o && (
             <section className={s.goal} aria-label="Tu objetivo">
-              <div className={s.goalHead}><span aria-hidden="true"><Target size={20} aria-hidden="true" /></span><div><small>Tu objetivo</small><h2>{o.tipo}</h2></div><button type="button" className={s.edit} disabled aria-label="Editar objetivo (próximamente)"><Pencil size={20} aria-hidden="true" /></button></div>
-              <div className={s.goalNums}><div><small>Meta de peso</small><b>{o.peso_meta} kg</b></div><div><small>Peso actual</small><b>{o.peso_actual} kg</b></div></div>
-              <div><small>Progreso</small><div className={s.barLight}><i style={{ width: `${progreso * 100}%` }} /></div><b className={s.goalDelta}>{(o.peso_actual - o.peso_inicial).toFixed(0)} kg</b></div>
+              <div className={s.goalHead}>
+                <span aria-hidden="true"><Target size={20} aria-hidden="true" /></span>
+                <div><small>Tu objetivo</small><h2>{o.tipo}</h2></div>
+                <button type="button" className={s.edit} disabled aria-label="Editar objetivo (próximamente)"><Pencil size={20} aria-hidden="true" /></button>
+              </div>
+              <div className={s.goalNums}>
+                <div><small>Meta de peso</small><b>{o.peso_meta} kg</b></div>
+                <div><small>Peso actual</small><b>{o.peso_actual} kg</b></div>
+              </div>
+              <div>
+                <small>Progreso</small>
+                <div className={s.barLight}><i style={{ width: `${progreso * 100}%` }} /></div>
+                <b className={s.goalDelta}>{(o.peso_actual - o.peso_inicial).toFixed(0)} kg</b>
+              </div>
             </section>
           )}
 
           {semana && (
             <section className={`${s.card} ${s.dark}`} aria-label="Progreso semanal">
-              <div className={s.rowBetween}><h2><TrendingDown size={20} aria-hidden="true" /> Tu progreso semanal</h2>{delta && <span className={s.pill}>{delta} kg {Number(delta) <= 0 ? <ArrowDown size={20} aria-hidden="true" /> : <ArrowUp size={20} aria-hidden="true" />}</span>}</div>
+              <div className={s.rowBetween}>
+                <h2><TrendingDown size={20} aria-hidden="true" /> Tu progreso semanal</h2>
+                {delta && <span className={s.pill}>{delta} kg {Number(delta) <= 0 ? <ArrowDown size={20} aria-hidden="true" /> : <ArrowUp size={20} aria-hidden="true" />}</span>}
+              </div>
               <Chart data={semana} />
             </section>
           )}
@@ -175,7 +219,7 @@ export default function Home() {
 
           <section className={`${s.card} ${s.dark} ${s.motto}`}>
             <p>Disciplina hoy, resultados mañana.</p>
-            <ImgSlot className={s.mascot} src={IMG.mascotaLema} w={150} h={110} label="Panda lema" alt="" />
+            <ImgSlot className={s.mascot} src={panda2} w={150} h={110} label="Panda lema" alt="" />
           </section>
         </aside>
       </div>
