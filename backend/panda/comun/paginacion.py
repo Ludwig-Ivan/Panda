@@ -25,4 +25,5 @@ class PaginacionCursor(CursorPagination):
         return parse_qs(urlparse(enlace).query).get(self.cursor_query_param, [None])[0]
 
     def get_paginated_response(self, data):
-        return Response({"data": data, "meta": {"limit": self.page_size, "next_cursor": self._cursor_opaco(self.get_next_link())}})
+        return Response({"data": data, "meta": {"limit": self.page_size,
+                                                "next_cursor": self._cursor_opaco(self.get_next_link())}})
