@@ -73,7 +73,7 @@ class UltimoItem(ErrorPanda):
     mensaje = "Una comida guardada necesita al menos un alimento. Si quieres, elimina la comida completa."
 
 class ArchivoMuyGrande(ErrorPanda):
-    status_code, codigo, mensaje = 413, "PAYLOAD_TOO_LARGE", "La foto pesa más de 10 MB. Elige otra o reduce su tamaño."
+    status_code, codigo, mensaje = 413, "PAYLOAD_TOO_LARGE", "La foto pesa más de 10MB. Elige otra o reduce su tamaño."
 
 class FormatoNoSoportado(ErrorPanda):
     status_code, codigo = 415, "UNSUPPORTED_MEDIA_TYPE"
@@ -144,7 +144,10 @@ def manejar_excepcion(exc, context):
         return _respuesta(404, "NOT_FOUND", NoEncontrado.mensaje, [], request_id)
     if isinstance(exc, Throttled):
         espera = math.ceil(exc.wait or 60)
-        return _respuesta(429, "RATE_LIMITED", "Hiciste muchas solicitudes seguidas. Espera un momento e inténtalo de nuevo.", [], request_id, espera)
+        return _respuesta(429,
+                          "RATE_LIMITED",
+                          "Hiciste muchas solicitudes seguidas. Espera un momento e inténtalo de nuevo.",
+                          [], request_id, espera)
     if isinstance(exc, ParseError):
         return _respuesta(400, "BAD_REQUEST", "No pudimos leer la solicitud. Revisa el formato.", [], request_id)
     if isinstance(exc, UnsupportedMediaType):
@@ -159,4 +162,6 @@ def manejar_excepcion(exc, context):
     # Error no controlado: se registra y se responde sin detalles técnicos.
     sentry_sdk.capture_exception(exc)
     log.error("error_no_controlado", exc_info=exc)
-    return _respuesta(500, "INTERNAL_ERROR", "Algo salió mal de nuestro lado. Inténtalo de nuevo en unos minutos.", [], request_id)
+    return _respuesta(500, "INTERNAL_ERROR",
+                      "Algo salió mal de nuestro lado. Inténtalo de nuevo en unos minutos.",
+                      [], request_id)

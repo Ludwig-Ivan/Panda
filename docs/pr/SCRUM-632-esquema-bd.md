@@ -98,7 +98,15 @@
 ### 3.3 Evidencia
 
 ```text
-✍️ últimas líneas de `pytest`, la cobertura o la respuesta de `curl` (sin tokens, correos reales ni contraseñas)
+$ docker compose exec api pytest tests/db -q
+.........                                                               [100%]
+== warnings summary ==
+tests/db/test_esquema.py::test_health_responde_ok
+  /usr/local/lib/python3.12/site-packages/django/core/handlers/base.py:61: UserWarning: No directory at: /app/staticfiles/
+    mw_instance = middleware(adapted_handler)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+9 passed, 1 warning in 9.58s
 ```
 
 ## 4. Riesgos y reversión
@@ -108,11 +116,11 @@
 
 ## 5. Checklist del PR (Definition of Done)
 
-- [ ] El título del PR y los commits siguen `tipo(alcance): SCRUM-632 descripción`
-- [ ] Una sola historia en la rama; base `develop`
-- [ ] Hay pruebas para el comportamiento nuevo y toda la suite está en verde
+- [x] El título del PR y los commits siguen `tipo(alcance): SCRUM-632 descripción`
+- [x] Una sola historia en la rama; base `develop`
+- [x] Hay pruebas para el comportamiento nuevo y toda la suite está en verde
 - [x] `openapi.yaml` regenerado si cambió un serializer o una vista — no aplica
-- [ ] Migraciones creadas en el mismo commit que su modelo y revisadas con `sqlmigrate`
+- [x] Migraciones creadas en el mismo commit que su modelo y revisadas con `sqlmigrate`
 - [x] `.env.example` actualizado si hay variables nuevas — no aplica
-- [ ] Sin secretos ni datos personales en el código, los logs ni este documento
-- [ ] Subtareas de Jira en *En revisión* y enlazadas al PR
+- [x] Sin secretos ni datos personales en el código, los logs ni este documento
+- [x] Subtareas de Jira en *En revisión* y enlazadas al PR
