@@ -1,4 +1,5 @@
 """Header Idempotency-Key en POST /estimaciones y POST /comidas (API §8)."""
+
 import uuid
 from collections.abc import Callable
 
@@ -26,5 +27,7 @@ def con_idempotencia(request, ejecutar: Callable[[], Response]) -> Response:
     respuesta = ejecutar()
     if 200 <= respuesta.status_code < 300:
         headers = {k: respuesta[k] for k in ("Location",) if respuesta.has_header(k)}
-        cache.set(clave_cache, {"data": respuesta.data, "status": respuesta.status_code, "headers": headers}, TTL_SEGUNDOS)
+        cache.set(
+            clave_cache, {"data": respuesta.data, "status": respuesta.status_code, "headers": headers}, TTL_SEGUNDOS
+        )
     return respuesta

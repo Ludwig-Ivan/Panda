@@ -1,0 +1,22 @@
+[importlinter]
+root_packages=
+    panda
+include_external_packages=True
+
+[importlinter:contract:dominio-puro]
+name= El dominio no depende de frameworks ni de otras capas
+type= forbidden
+source_modules=
+    panda.dominio
+forbidden_modules=
+    django
+    rest_framework
+    storages
+    boto3
+    PIL
+    panda.identidad
+    panda.catalogos
+    panda.comidas
+    panda.estimacion
+    panda.recomendacion
+    panda.comun
