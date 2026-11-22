@@ -33,11 +33,18 @@ def crear_usuario(db):
     def _crear(email="ana@ejemplo.com", completo=True, nivel="moderado", peso="70"):
         usuario = Usuario.objects.create_user(email=email, password=PASSWORD, mayor_edad_declarado=True)
         if completo:
-            Perfil.objects.create(usuario=usuario, edad=29, sexo="femenino", peso_kg=Decimal(peso),
-                                  estatura_cm=Decimal("163"), nivel_actividad=nivel)
+            Perfil.objects.create(
+                usuario=usuario,
+                edad=29,
+                sexo="femenino",
+                peso_kg=Decimal(peso),
+                estatura_cm=Decimal("163"),
+                nivel_actividad=nivel,
+            )
             for tipo, version in settings.PANDA["CONSENTIMIENTOS_VIGENTES"].items():
                 Consentimiento.objects.create(usuario=usuario, tipo=tipo, version=version)
         return usuario
+
     return _crear
 
 
@@ -55,8 +62,13 @@ def cliente(api, usuario):
 @pytest.fixture
 def catalogo(db):
     Alimento.objects.create(nombre="Tacos de pollo", kcal_100g=Decimal("175.56"), fuente="curado")
-    Alimento.objects.create(nombre="Frijoles de la olla", alias=["frijoles"], kcal_100g=Decimal("89"),
-                            porcion_tipica_g=Decimal("150"), fuente="curado")
+    Alimento.objects.create(
+        nombre="Frijoles de la olla",
+        alias=["frijoles"],
+        kcal_100g=Decimal("89"),
+        porcion_tipica_g=Decimal("150"),
+        fuente="curado",
+    )
     for codigo, nombre, met, intensidad in [
         ("17200", "Caminar a paso moderado", "3.5", "moderada"),
         ("01020", "Bicicleta recreativa", "6.8", "vigorosa"),

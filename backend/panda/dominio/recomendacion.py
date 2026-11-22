@@ -70,7 +70,7 @@ class Recomendacion:
 
 class _ConSesiones(Protocol):
     @property
-    def sesiones(self) -> int: ...   # property: acepta dataclasses frozen
+    def sesiones(self) -> int: ...  # property: acepta dataclasses frozen
 
 
 def kcal_por_minuto(met: float, peso_kg: float) -> float:
@@ -99,7 +99,10 @@ def planificar(kcal: float, kpm: float, p: ParametrosRecomendacion) -> tuple[int
     return duracion, sesiones
 
 
-def mensaje_para(actividades: Sequence[_ConSesiones], p: ParametrosRecomendacion = ParametrosRecomendacion()) -> str:
+def mensaje_para(actividades: Sequence[_ConSesiones], p: ParametrosRecomendacion | None = None) -> str:
+    if p is None:
+        p = ParametrosRecomendacion()
+
     """Texto neutral, sin culpa ni obligación (RN-04, RI-U-09)."""
     if not actividades:
         return "Hoy no encontramos actividades que encajen con tu perfil. Cualquier movimiento ligero suma."
@@ -117,8 +120,11 @@ def recomendar(
     nivel: NivelActividad,
     catalogo: Iterable[ActividadCatalogo],
     preferidas: set[int],
-    p: ParametrosRecomendacion = ParametrosRecomendacion(),
+    p: ParametrosRecomendacion | None = None,
 ) -> Recomendacion:
+    if p is None:
+        p = ParametrosRecomendacion()
+
     actividades: list[ActividadRecomendada] = []
     if kcal_objetivo > 0:
         permitidas = INTENSIDADES_PERMITIDAS[nivel]
@@ -133,11 +139,9 @@ def recomendar(
                 continue
             duracion, sesiones = plan
             actividades.append(
-                ActividadRecomendada(actividad,
-                                     duracion,
-                                     sesiones,
-                                     redondear(duracion * kpm),
-                                     actividad.id in preferidas)
+                ActividadRecomendada(
+                    actividad, duracion, sesiones, redondear(duracion * kpm), actividad.id in preferidas
+                )
             )
             if len(actividades) == p.max_actividades:
                 break

@@ -61,10 +61,12 @@ class Comida(models.Model):
             models.CheckConstraint(condition=Q(estado__in=EstadoComida.values), name="ck_comidas_estado"),
             models.CheckConstraint(condition=Q(origen__in=OrigenComida.values), name="ck_comidas_origen"),
             models.CheckConstraint(
-                condition=Q(kcal_total__gte=0,
-                            kcal_total__lte=5000,
-                            kcal_min__lte=F("kcal_total"),
-                            kcal_max__gte=F("kcal_total")),
+                condition=Q(
+                    kcal_total__gte=0,
+                    kcal_total__lte=5000,
+                    kcal_min__lte=F("kcal_total"),
+                    kcal_max__gte=F("kcal_total"),
+                ),
                 name="ck_comidas_kcal_rango",
             ),
             models.CheckConstraint(
@@ -81,11 +83,9 @@ class Comida(models.Model):
 class ComidaItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     comida = models.ForeignKey(Comida, on_delete=models.CASCADE, related_name="items")
-    alimento = models.ForeignKey("catalogos.Alimento",
-                                 on_delete=models.SET_NULL,
-                                 null=True,
-                                 blank=True,
-                                 related_name="+")
+    alimento = models.ForeignKey(
+        "catalogos.Alimento", on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    )
     nombre = models.CharField(max_length=100)
     porcion_g = models.DecimalField(max_digits=6, decimal_places=1)
     kcal_100g = models.DecimalField(max_digits=6, decimal_places=2)
@@ -102,27 +102,19 @@ class ComidaItem(models.Model):
         db_table = "comida_items"
         ordering = ["created_at"]
         constraints = [
-            models.CheckConstraint(condition=Q(porcion_g__gte=1,
-                                               porcion_g__lte=2000),
-                                               name="ck_comida_items_porcion"),
+            models.CheckConstraint(condition=Q(porcion_g__gte=1, porcion_g__lte=2000), name="ck_comida_items_porcion"),
             models.CheckConstraint(
-                condition=Q(kcal__gte=0,
-                            kcal_min__lte=F("kcal"),
-                            kcal_max__gte=F("kcal")),
-                            name="ck_comida_items_kcal"
+                condition=Q(kcal__gte=0, kcal_min__lte=F("kcal"), kcal_max__gte=F("kcal")), name="ck_comida_items_kcal"
             ),
             models.CheckConstraint(
                 condition=Q(confianza__isnull=True) | Q(confianza__gte=0, confianza__lte=1),
-                name="ck_comida_items_confianza"
+                name="ck_comida_items_confianza",
             ),
             models.CheckConstraint(
-                condition=Q(origen="usuario") | Q(confianza__isnull=False),
-                name="ck_comida_items_origen_confianza"
+                condition=Q(origen="usuario") | Q(confianza__isnull=False), name="ck_comida_items_origen_confianza"
             ),
-            models.CheckConstraint(condition=Q(origen__in=OrigenItem.values),
-                                   name="ck_comida_items_origen"),
-            models.CheckConstraint(condition=Q(fuente_kcal__in=FuenteKcal.values),
-                                   name="ck_comida_items_fuente_kcal"),
+            models.CheckConstraint(condition=Q(origen__in=OrigenItem.values), name="ck_comida_items_origen"),
+            models.CheckConstraint(condition=Q(fuente_kcal__in=FuenteKcal.values), name="ck_comida_items_fuente_kcal"),
         ]
 
     @property

@@ -58,4 +58,4 @@ def test_limites_de_seguridad(kcal, peso, nivel):
         assert a.duracion_min % 5 == 0 and 5 <= a.duracion_min <= 180
         assert 1 <= a.sesiones <= 4
         assert a.duracion_min // a.sesiones <= 90
-        assert a.kcal_estimadas >= kcal - 1   # la duración se redondea hacia arriba
+        assert a.kcal_estimadas >= kcal - 1  # la duración se redondea hacia arriba
