@@ -6,7 +6,7 @@
 | Subtareas | T-074, T-075, T-076, T-232, T-233, T-234, T-235 |
 | Rama → base | `feature/SCRUM-444-autenticacion-jwt` → `develop` |
 | Pull Request | #15 |
-| Autor / Revisor | Ludwig Iván Ortiz Sierra / Estefanía López Rivas o Checo (quien no haya hecho el último push) |
+| Autor / Revisor | Ludwig Iván Ortiz Sierra |
 | Fecha | 2026-11-22 |
 
 ## 1. Qué cambió
