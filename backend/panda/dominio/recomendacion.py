@@ -133,7 +133,11 @@ def recomendar(
                 continue
             duracion, sesiones = plan
             actividades.append(
-                ActividadRecomendada(actividad, duracion, sesiones, redondear(duracion * kpm), actividad.id in preferidas)
+                ActividadRecomendada(actividad,
+                                     duracion,
+                                     sesiones,
+                                     redondear(duracion * kpm),
+                                     actividad.id in preferidas)
             )
             if len(actividades) == p.max_actividades:
                 break

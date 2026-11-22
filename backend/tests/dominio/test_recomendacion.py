@@ -3,7 +3,13 @@ from hypothesis import given
 from hypothesis import strategies as st
 
 from panda.dominio.recomendacion import (
-    ActividadCatalogo, Intensidad, NivelActividad, ParametrosRecomendacion, kcal_por_minuto, planificar, recomendar,
+    ActividadCatalogo,
+    Intensidad,
+    NivelActividad,
+    ParametrosRecomendacion,
+    kcal_por_minuto,
+    planificar,
+    recomendar,
 )
 
 CAMINAR = ActividadCatalogo(1, "Caminar a paso moderado", 3.5, Intensidad.MODERADA)
