@@ -93,8 +93,9 @@ class Perfil(models.Model):
         constraints = [
             models.CheckConstraint(condition=Q(edad__gte=18, edad__lte=100), name="ck_perfiles_edad"),
             models.CheckConstraint(condition=Q(peso_kg__gte=30, peso_kg__lte=300), name="ck_perfiles_peso"),
-            models.CheckConstraint(condition=Q(estatura_cm__gte=120, estatura_cm__lte=230),
-                                   name="ck_perfiles_estatura"),
+            models.CheckConstraint(
+                condition=Q(estatura_cm__gte=120, estatura_cm__lte=230), name="ck_perfiles_estatura"
+            ),
             models.CheckConstraint(condition=Q(sexo__in=Sexo.values), name="ck_perfiles_sexo"),
             models.CheckConstraint(condition=Q(nivel_actividad__in=NivelActividad.values), name="ck_perfiles_nivel"),
         ]
@@ -109,10 +110,12 @@ class Consentimiento(models.Model):
     class Meta:
         db_table = "consentimientos"
         constraints = [
-            models.UniqueConstraint(fields=["usuario", "tipo", "version"],
-                                    name="uq_consentimientos_usuario_tipo_version"),
+            models.UniqueConstraint(
+                fields=["usuario", "tipo", "version"], name="uq_consentimientos_usuario_tipo_version"
+            ),
             models.CheckConstraint(condition=Q(tipo__in=TipoConsentimiento.values), name="ck_consentimientos_tipo"),
         ]
+
 
 class PreferenciaActividad(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name="preferencias_actividad")

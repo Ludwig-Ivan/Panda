@@ -16,8 +16,9 @@ class Recomendacion(models.Model):
     class Meta:
         db_table = "recomendaciones"
         constraints = [
-            models.CheckConstraint(condition=Q(kcal_objetivo__gte=0, kcal_objetivo__lte=5000),
-                                   name="ck_recomendaciones_kcal"),
+            models.CheckConstraint(
+                condition=Q(kcal_objetivo__gte=0, kcal_objetivo__lte=5000), name="ck_recomendaciones_kcal"
+            ),
         ]
 
 
@@ -35,8 +36,10 @@ class RecomendacionItem(models.Model):
         ordering = ["orden"]
         constraints = [
             models.UniqueConstraint(fields=["recomendacion", "orden"], name="uq_recomendacion_items_orden"),
-            models.CheckConstraint(condition=Q(duracion_min__gte=5, duracion_min__lte=180),
-                                   name="ck_recomendacion_items_duracion"),
-            models.CheckConstraint(condition=Q(sesiones__gte=1, sesiones__lte=4),
-                                   name="ck_recomendacion_items_sesiones"),
+            models.CheckConstraint(
+                condition=Q(duracion_min__gte=5, duracion_min__lte=180), name="ck_recomendacion_items_duracion"
+            ),
+            models.CheckConstraint(
+                condition=Q(sesiones__gte=1, sesiones__lte=4), name="ck_recomendacion_items_sesiones"
+            ),
         ]

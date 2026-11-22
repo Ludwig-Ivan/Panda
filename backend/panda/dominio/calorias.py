@@ -61,7 +61,10 @@ def kcal_por_porcion(gramos: float, kcal_100g: float) -> float:
     return gramos * kcal_100g / 100
 
 
-def factor_rango(entrada: EntradaItem, p: ParametrosRango = ParametrosRango()) -> float:
+def factor_rango(entrada: EntradaItem, p: ParametrosRango | None = None) -> float:
+    if p is None:
+        p = ParametrosRango()
+
     if entrada.capturado_por_usuario:
         return p.usuario
     confianza = entrada.confianza if entrada.confianza is not None else 0.0
@@ -71,13 +74,14 @@ def factor_rango(entrada: EntradaItem, p: ParametrosRango = ParametrosRango()) -
     return f
 
 
-def calcular_item(entrada: EntradaItem, p: ParametrosRango = ParametrosRango()) -> ResultadoItem:
+def calcular_item(entrada: EntradaItem, p: ParametrosRango | None = None) -> ResultadoItem:
+    if p is None:
+        p = ParametrosRango()
+
     kcal = redondear(kcal_por_porcion(entrada.gramos, entrada.kcal_100g))
     f = factor_rango(entrada, p)
     confianza_baja = (
-        not entrada.capturado_por_usuario
-        and entrada.confianza is not None
-        and entrada.confianza < p.confianza_revision
+        not entrada.capturado_por_usuario and entrada.confianza is not None and entrada.confianza < p.confianza_revision
     )
     return ResultadoItem(
         kcal=kcal,

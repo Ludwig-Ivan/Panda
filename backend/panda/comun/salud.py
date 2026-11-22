@@ -19,6 +19,7 @@ def health(request):
         checks["storage"] = "degraded"
 
     from panda.estimacion.resiliencia import estado_vision
+
     checks["vision"] = estado_vision()
 
     ok = checks["database"] == "ok"
