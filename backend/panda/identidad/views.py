@@ -11,11 +11,22 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from panda.comun.errores import CredencialesInvalidas
+from panda.comun.errores import CredencialesInvalidas, NoEncontrado
 from panda.comun.throttles import LoginRateThrottle, RegistroRateThrottle
 
 from . import services
-from .serializers import LoginSerializer, RegistroSerializer, RenovacionSerializer, SesionSerializer, UsuarioSerializer
+from .models import Consentimiento, Perfil, PreferenciaActividad
+from .serializers import (
+    ConsentimientosEntradaSerializer,
+    EstadoConsentimientosSerializer,
+    LoginSerializer,
+    PerfilSerializer,
+    PreferenciasSerializer,
+    RegistroSerializer,
+    RenovacionSerializer,
+    SesionSerializer,
+    UsuarioSerializer,
+)
 from .tokens import borrar_cookie_refresh, emitir_tokens, poner_cookie_refresh, rotar_refresh
 
 EXPIRA_EN = int(settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds())
@@ -87,3 +98,66 @@ class LogoutView(APIView):
         respuesta = Response(status=status.HTTP_204_NO_CONTENT)
         borrar_cookie_refresh(respuesta)
         return respuesta
+
+
+class UsuarioMeView(APIView):
+    @extend_schema(responses=UsuarioSerializer, tags=["Cuenta"])
+    def get(self, request):
+        return Response(UsuarioSerializer(request.user).data)
+
+    @extend_schema(request=UsuarioSerializer, responses=UsuarioSerializer, tags=["Cuenta"])
+    def patch(self, request):
+        entrada = UsuarioSerializer(request.user, data=request.data, partial=True)
+        entrada.is_valid(raise_exception=True)
+        entrada.save()
+        return Response(entrada.data)
+
+
+class ConsentimientosView(APIView):
+    def _estado(self, usuario):
+        return {
+            "vigentes": [{"tipo": t, "version": v} for t, v in services.versiones_vigentes().items()],
+            "aceptados": list(Consentimiento.objects.filter(usuario=usuario).values("tipo", "version", "aceptado_at")),
+            "pendientes": services.consentimientos_pendientes(usuario),
+        }
+
+    @extend_schema(responses=EstadoConsentimientosSerializer, tags=["Cuenta"])
+    def get(self, request):
+        return Response(self._estado(request.user))
+
+    @extend_schema(request=ConsentimientosEntradaSerializer, responses=EstadoConsentimientosSerializer, tags=["Cuenta"])
+    def post(self, request):
+        entrada = ConsentimientosEntradaSerializer(data=request.data)
+        entrada.is_valid(raise_exception=True)
+        services.aceptar_consentimientos(request.user, entrada.validated_data["consentimientos"])
+        return Response(self._estado(request.user))
+
+
+class PerfilView(APIView):
+    @extend_schema(responses=PerfilSerializer, tags=["Perfil"])
+    def get(self, request):
+        perfil = Perfil.objects.filter(usuario=request.user).first()
+        if perfil is None:
+            raise NoEncontrado("Aún no has capturado tu perfil.")
+        return Response(PerfilSerializer(perfil).data)
+
+    @extend_schema(request=PerfilSerializer, responses=PerfilSerializer, tags=["Perfil"])
+    def put(self, request):
+        entrada = PerfilSerializer(data=request.data)
+        entrada.is_valid(raise_exception=True)
+        perfil, _ = Perfil.objects.update_or_create(usuario=request.user, defaults=entrada.validated_data)
+        return Response(PerfilSerializer(perfil).data)
+
+
+class PreferenciasView(APIView):
+    @extend_schema(responses=PreferenciasSerializer, tags=["Perfil"])
+    def get(self, request):
+        ids = list(PreferenciaActividad.objects.filter(usuario=request.user).values_list("actividad_id", flat=True))
+        return Response({"actividad_ids": ids})
+
+    @extend_schema(request=PreferenciasSerializer, responses=PreferenciasSerializer, tags=["Perfil"])
+    def put(self, request):
+        entrada = PreferenciasSerializer(data=request.data)
+        entrada.is_valid(raise_exception=True)
+        ids = services.reemplazar_preferencias(request.user, entrada.validated_data["actividad_ids"])
+        return Response({"actividad_ids": ids})
