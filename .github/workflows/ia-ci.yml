@@ -1,0 +1,58 @@
+# .github/workflows/ia-ci.yml  (T-207)
+# Lint, pruebas con modelos falsos (sin red ni GPU) y construcción de la imagen CPU.
+# Sin filtro `paths:` (CR-06 de la Guía de Configuración): un check obligatorio que no corre deja el PR bloqueado.
+name: ia-ci
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ia-calidad-y-pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: ia-service
+    env:
+      HF_HUB_OFFLINE: "1"        # ninguna prueba descarga modelos
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: ia-service/requirements/*.txt
+
+      - name: Dependencias (torch CPU)
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cpu torch==2.15.0 torchvision==0.29.2
+          pip install -r requirements/dev.txt
+
+      - name: Lint y formato
+        run: ruff check . && ruff format --check .
+
+      - name: Pruebas
+        run: pytest -q -m "not regresion"
+
+  ia-imagen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir la imagen CPU
+        run: docker build --build-arg VARIANTE=cpu -t panda-ia:ci ia-service
+      - name: Arranca y responde /health con el modelo falso
+        run: |
+          docker run -d --name ia -p 8000:8000 -e IA_MODELO=falso -e IA_API_KEYS=ci panda-ia:ci
+          for i in $(seq 1 30); do curl -fsS localhost:8000/ready && exit 0; sleep 2; done
+          docker logs ia; exit 1

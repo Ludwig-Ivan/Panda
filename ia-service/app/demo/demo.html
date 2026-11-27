@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panda · Prueba del servicio de IA</title>
+<link rel="icon" href="data:,">
+<style>
+  :root { --fondo:#f6f7f4; --tarjeta:#fff; --texto:#1f2a24; --suave:#66746b; --borde:#dfe4dc;
+          --verde:#2f7d4f; --verde-claro:#e6f2ea; --aviso:#8a5a00; --aviso-fondo:#fff6e0; --error:#b3261e; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--fondo);
+         color:var(--texto); line-height:1.45; }
+  header { padding:20px 24px 8px; max-width:1100px; margin:auto; display:flex; justify-content:space-between;
+           align-items:flex-end; gap:16px; flex-wrap:wrap; }
+  h1 { font-size:22px; margin:0; } h1 span { color:var(--verde); }
+  header p { margin:4px 0 0; color:var(--suave); font-size:14px; }
+  .clave { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--suave); }
+  main { max-width:1100px; margin:auto; padding:8px 24px 40px; display:grid; gap:16px;
+         grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); }
+  section { background:var(--tarjeta); border:1px solid var(--borde); border-radius:12px; padding:18px; }
+  h2 { font-size:15px; margin:0 0 12px; display:flex; gap:8px; align-items:center; }
+  h2 b { background:var(--verde); color:#fff; border-radius:50%; width:22px; height:22px; display:inline-grid;
+         place-items:center; font-size:12px; }
+  label { display:block; font-size:13px; color:var(--suave); margin:10px 0 4px; }
+  input, select { width:100%; padding:9px 10px; border:1px solid var(--borde); border-radius:8px; font:inherit;
+                  background:#fff; color:var(--texto); }
+  input[type=checkbox] { width:auto; }
+  .fila { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .soltar { border:2px dashed var(--borde); border-radius:10px; padding:16px; text-align:center; cursor:pointer;
+            color:var(--suave); font-size:14px; transition:.15s; }
+  .soltar.encima, .soltar:hover { border-color:var(--verde); background:var(--verde-claro); }
+  .soltar img { max-width:100%; max-height:220px; border-radius:8px; display:block; margin:0 auto 8px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; margin-top:12px; }
+  td { padding:6px 4px; border-bottom:1px solid var(--borde); }
+  td.num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  td.rango { color:var(--suave); font-size:12px; text-align:right; }
+  .total { font-size:34px; font-weight:700; color:var(--verde); }
+  .total small { font-size:14px; color:var(--suave); font-weight:400; }
+  .meta { color:var(--suave); font-size:12px; margin-top:6px; }
+  .aviso { background:var(--aviso-fondo); color:var(--aviso); border-radius:8px; padding:8px 10px; font-size:13px;
+           margin-top:8px; }
+  .error { color:var(--error); font-size:14px; margin-top:8px; }
+  .resultado { background:var(--verde-claro); border-radius:10px; padding:14px; margin-top:14px; }
+  .resultado .tiempo { font-size:30px; font-weight:700; color:var(--verde); }
+  .resultado dl { display:grid; grid-template-columns:auto 1fr; gap:4px 12px; margin:10px 0 0; font-size:14px; }
+  .resultado dt { color:var(--suave); }
+  .resultado dd { margin:0; }
+  .estado { font-size:12px; color:var(--suave); }
+  .punto { display:inline-block; width:8px; height:8px; border-radius:50%; background:#bbb; margin-right:4px; }
+  .punto.ok { background:var(--verde); } .punto.mal { background:var(--error); }
+  .chico { font-size:12px; color:var(--suave); }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🐼 Panda · <span>prueba del servicio de IA</span></h1>
+    <p>Página solo para probar el modelo y el cálculo de actividad (como las secciones 10–12 del notebook). La app real la hace el frontend.</p>
+  </div>
+  <div>
+    <div class="clave">API key <input id="clave" type="password" placeholder="cambia-esta-clave" style="width:180px"></div>
+    <div class="estado" id="estado" style="text-align:right;margin-top:6px"></div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2><b>1</b> Foto del platillo</h2>
+    <div class="soltar" id="soltar">
+      <img id="vista" alt="" hidden>
+      <div id="soltarTexto">Arrastra aquí la foto o haz clic para elegirla<br><span class="chico">JPG, PNG o WebP · mínimo 640×480 · máx. 10 MB · tomada desde arriba</span></div>
+    </div>
+    <input id="archivo" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+    <div id="errorFoto" class="error"></div>
+    <div id="nutrientes" hidden>
+      <div class="total" style="margin-top:14px"><span id="kcalFoto"></span> <small>kcal</small></div>
+      <div class="chico" id="rangoFoto"></div>
+      <table id="tabla"></table>
+      <div class="meta" id="metaModelo"></div>
+      <div id="avisosFoto"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><b>2</b> Tus datos</h2>
+    <label for="kcal">Calorías del platillo (salen de la foto; también puedes escribirlas)</label>
+    <input id="kcal" type="number" min="1" max="5000" step="1" value="500">
+    <div class="fila">
+      <div><label for="peso">Peso (kg)</label><input id="peso" type="number" min="30" max="300" step="0.1" value="70"></div>
+      <div><label for="edad">Edad (años)</label><input id="edad" type="number" min="18" max="100" step="1" value="25"></div>
+    </div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:12px">
+      <input id="neto" type="checkbox" checked> Neto (solo las calorías extra por moverse; recomendado)
+    </label>
+    <div class="chico" id="compendio" style="margin-top:8px"></div>
+  </section>
+
+  <section>
+    <h2><b>3</b> Elige una actividad</h2>
+    <label for="categoria">Categoría</label>
+    <select id="categoria"></select>
+    <label for="actividad">Actividad (de la más suave a la más intensa)</label>
+    <select id="actividad"></select>
+    <div id="errorAct" class="error"></div>
+    <div class="resultado" id="resultado" hidden>
+      <div class="chico">Tiempo estimado para quemar <span id="rKcal"></span> kcal</div>
+      <div class="tiempo" id="rTiempo"></div>
+      <dl>
+        <dt>Actividad</dt><dd id="rActividad"></dd>
+        <dt>Intensidad</dt><dd id="rIntensidad"></dd>
+        <dt>Persona</dt><dd id="rPersona"></dd>
+      </dl>
+      <div id="rAvisos"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const NOMBRES = { calorias: "Calorías", masa: "Masa", grasa: "Grasa", carbohidrato: "Carbohidratos", proteina: "Proteína" };
+const CAMINAR = "1719060";
+let catalogo = [];
+let temporizador = null;
+
+function leer(clave, defecto) { try { return localStorage.getItem(clave) ?? defecto; } catch { return defecto; } }
+function guardar(clave, valor) { try { localStorage.setItem(clave, valor); } catch {} }
+
+$("clave").value = leer("panda-ia-clave", "cambia-esta-clave");
+$("clave").addEventListener("change", () => { guardar("panda-ia-clave", $("clave").value); cargarCatalogo(); });
+
+async function api(ruta, opciones = {}) {
+  const r = await fetch(ruta, { ...opciones, headers: { "X-API-Key": $("clave").value, ...(opciones.headers || {}) } });
+  const datos = await r.json().catch(() => ({}));
+  if (!r.ok) {
+    const e = datos.error || {};
+    let msg = e.message || `Error ${r.status}`;
+    if (r.status === 401) msg = "La API key no es válida. Escribe la de IA_API_KEYS de tu .env (arriba a la derecha).";
+    if (e.details && e.details.length && r.status === 422 && e.code === "VALIDATION_ERROR")
+      msg += " (" + e.details.map(d => d.field).join(", ") + ")";
+    throw new Error(msg);
+  }
+  return datos;
+}
+
+// ---------- estado del servicio
+async function revisarEstado() {
+  try {
+    const r = await fetch("/ready"); const d = await r.json();
+    $("estado").innerHTML = Object.entries(d.componentes || {}).map(([k, v]) =>
+      `<span class="punto ${v === "ok" ? "ok" : v === "error" ? "mal" : ""}"></span>${k}: ${v}`).join(" &nbsp; ");
+    if (r.status !== 200) setTimeout(revisarEstado, 3000);
+  } catch { $("estado").textContent = "No responde el servicio"; }
+}
+
+// ---------- 1. foto
+const soltar = $("soltar");
+soltar.addEventListener("click", () => $("archivo").click());
+soltar.addEventListener("dragover", (e) => { e.preventDefault(); soltar.classList.add("encima"); });
+soltar.addEventListener("dragleave", () => soltar.classList.remove("encima"));
+soltar.addEventListener("drop", (e) => { e.preventDefault(); soltar.classList.remove("encima"); if (e.dataTransfer.files[0]) estimar(e.dataTransfer.files[0]); });
+$("archivo").addEventListener("change", () => { if ($("archivo").files[0]) estimar($("archivo").files[0]); });
+
+async function estimar(archivo) {
+  $("errorFoto").textContent = "";
+  $("vista").src = URL.createObjectURL(archivo); $("vista").hidden = false;
+  $("soltarTexto").innerHTML = `<b>${archivo.name}</b><br><span class="chico">Estimando… (haz clic para cambiar la foto)</span>`;
+  const form = new FormData(); form.append("foto", archivo);
+  try {
+    const d = await api("/v1/vision/estimar", { method: "POST", body: form });
+    const c = d.nutrientes.calorias;
+    $("kcalFoto").textContent = "≈ " + Math.round(c.valor);
+    $("rangoFoto").textContent = `Rango probable: ${Math.round(c.min)} – ${Math.round(c.max)} kcal (±${c.pct_mae}% error promedio del modelo)`;
+    $("tabla").innerHTML = Object.entries(d.nutrientes).map(([k, n]) =>
+      `<tr><td>${NOMBRES[k] || k}</td><td class="num"><b>${n.valor}</b> ${n.unidad}</td><td class="rango">${n.min} – ${n.max}</td></tr>`).join("");
+    $("metaModelo").textContent = `Modelo ${d.modelo.nombre} · versión ${d.modelo.version} · ${d.latencia_ms} ms` +
+      (d.modelo.nombre === "falso" ? " · modo de prueba (IA_MODELO=falso): siempre da 450 kcal" : "");
+    $("avisosFoto").innerHTML = d.avisos.map(a => `<div class="aviso">ⓘ ${a}</div>`).join("");
+    $("nutrientes").hidden = false;
+    $("soltarTexto").innerHTML = `<b>${archivo.name}</b><br><span class="chico">Haz clic o arrastra otra foto para cambiarla</span>`;
+    $("kcal").value = Math.round(c.valor);
+    calcular();
+  } catch (e) {
+    $("nutrientes").hidden = true;
+    $("errorFoto").textContent = "✗ " + e.message;
+    $("soltarTexto").innerHTML = `<b>${archivo.name}</b><br><span class="chico">Haz clic o arrastra otra foto</span>`;
+  }
+}
+
+// ---------- 3. catálogo y cálculo
+async function cargarCatalogo() {
+  const edad = parseInt($("edad").value, 10);
+  if (!(edad >= 18 && edad <= 100)) return;
+  try {
+    const d = await api(`/v1/actividad/catalogo?edad=${edad}&neto=${$("neto").checked}`);
+    catalogo = d.actividades;
+    $("compendio").textContent = `Compendio: ${d.compendio} (factor ${d.factor_o2} mL O₂/kg/min)`;
+    const previa = $("categoria").value || "Todas";
+    const categorias = ["Todas", ...new Set(catalogo.map(a => a.categoria))].sort((a, b) => a === "Todas" ? -1 : b === "Todas" ? 1 : a.localeCompare(b, "es"));
+    $("categoria").innerHTML = categorias.map(c => `<option>${c}</option>`).join("");
+    $("categoria").value = categorias.includes(previa) ? previa : "Todas";
+    llenarActividades();
+    $("errorAct").textContent = "";
+  } catch (e) { $("errorAct").textContent = "✗ " + e.message; }
+}
+
+function llenarActividades() {
+  const previa = $("actividad").value || CAMINAR;
+  const cat = $("categoria").value;
+  const lista = catalogo.filter(a => cat === "Todas" || a.categoria === cat);
+  $("actividad").innerHTML = lista.map(a => `<option value="${a.codigo}">${a.actividad}  (${a.met} MET)</option>`).join("");
+  if (lista.some(a => a.codigo === previa)) $("actividad").value = previa;
+  calcular();
+}
+
+async function calcular() {
+  const cuerpo = { kcal: parseFloat($("kcal").value), peso_kg: parseFloat($("peso").value),
+                   edad: parseInt($("edad").value, 10), codigo: $("actividad").value, neto: $("neto").checked };
+  if (!cuerpo.codigo) return;
+  try {
+    const r = await api("/v1/actividad/calcular", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(cuerpo) });
+    $("rKcal").textContent = Math.round(r.kcal);
+    $("rTiempo").textContent = r.tiempo;
+    $("rActividad").textContent = r.actividad;
+    $("rIntensidad").textContent = `${r.met} MET → ${r.kcal_por_min} kcal por minuto (${r.neto ? "neto" : "bruto"})`;
+    $("rPersona").textContent = `${cuerpo.peso_kg} kg, ${cuerpo.edad} años`;
+    $("rAvisos").innerHTML = r.avisos.map(a => `<div class="aviso">ⓘ ${a}</div>`).join("");
+    $("resultado").hidden = false;
+    $("errorAct").textContent = "";
+  } catch (e) { $("resultado").hidden = true; $("errorAct").textContent = "✗ " + e.message; }
+}
+
+function despues(fn) { clearTimeout(temporizador); temporizador = setTimeout(fn, 350); }
+$("categoria").addEventListener("change", llenarActividades);
+$("actividad").addEventListener("change", calcular);
+$("kcal").addEventListener("input", () => despues(calcular));
+$("peso").addEventListener("input", () => despues(calcular));
+$("edad").addEventListener("input", () => despues(cargarCatalogo));
+$("neto").addEventListener("change", cargarCatalogo);
+
+revisarEstado();
+cargarCatalogo();
+</script>
+</body>
+</html>

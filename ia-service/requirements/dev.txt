@@ -1,0 +1,4 @@
+# requirements/dev.txt — pruebas y calidad (necesita torch instalado aparte, ver vision.txt)
+-r vision.txt
+pytest>=8
+ruff>=0.7

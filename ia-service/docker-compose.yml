@@ -1,0 +1,41 @@
+# ia-service/docker-compose.yml  (T-205)
+#   CPU:  docker compose --profile cpu up ia
+#   GPU:  docker compose --profile gpu up ia-gpu      (necesita NVIDIA Container Toolkit)
+# Las dos variantes responden en el host como `ia` dentro de la red, para que el backend no cambie su URL.
+services:
+  ia:
+    profiles: [cpu]
+    build:
+      context: .
+      args: { VARIANTE: cpu }
+    image: panda-ia:cpu
+    env_file: .env
+    environment:
+      IA_DISPOSITIVO: cpu
+    ports: ["8100:8000"]
+    volumes: [modelos:/modelos]
+
+  ia-gpu:
+    profiles: [gpu]
+    build:
+      context: .
+      args: { VARIANTE: gpu }
+    image: panda-ia:gpu
+    env_file: .env
+    environment:
+      IA_DISPOSITIVO: cuda
+    ports: ["8100:8000"]
+    volumes: [modelos:/modelos]
+    networks:
+      default:
+        aliases: [ia]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  modelos: {}   # best.pt se descarga una vez y se reutiliza en cada arranque (se verifica el SHA-256)
