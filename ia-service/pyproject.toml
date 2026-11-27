@@ -1,0 +1,24 @@
+[project]
+name = "panda-ia-service"
+version = "0.1.0"
+description = "Servicio de IA de Panda: estimación de nutrientes desde una foto y minutos de actividad"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "regresion: compara contra el notebook con los pesos reales (necesita IA_MODELO_PATH y las fotos fijas)",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "BLE", "SIM"]
+ignore = ["S101"]   # assert en pruebas
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106"]
+"scripts/*" = ["S603", "S607"]

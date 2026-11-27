@@ -1,0 +1,8 @@
+# requirements/vision.txt — modelo de visión (SigLIP2 + cabeza CalorieK)
+# torch y torchvision NO van aquí: cada imagen los instala desde su origen
+#   - CPU: pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision
+#   - GPU: pip install torch torchvision   (PyPI, trae CUDA)
+# Versiones probadas: torch 2.15.0 · torchvision 0.29.2 · transformers 5.24.1 (transformers 5.x exige torch >= 2.6)
+-r base.txt
+transformers==5.24.1
+safetensors>=0.4
